@@ -26,6 +26,41 @@
         var(--bg);
     }
     .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 64px; }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.05);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 14px;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+    }
+    .brand {
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .brand span { color: var(--red); }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
     .hero {
       min-height: 88vh;
       display: grid;
@@ -233,6 +268,27 @@
       padding: 48px 24px;
     }
     .cta p { color: rgba(255,255,255,.86); max-width: 700px; margin: 0 auto 24px; line-height: 1.6; }
+    .footer {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 22px 8px 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .footer a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+    }
     @media (max-width: 980px) {
       .hero, .stats, .grid-3, .courses { grid-template-columns: 1fr; }
       .portrait { min-height: 420px; }
@@ -241,6 +297,15 @@
 </head>
 <body>
   <main class="wrap">
+    <header class="header">
+      <div class="brand">Анатолій <span>Маліновський</span></div>
+      <nav class="nav">
+        <a href="#about">Про мене</a>
+        <a href="#courses">Курси</a>
+        <a href="#contacts">Контакти</a>
+      </nav>
+    </header>
+
     <section class="hero">
       <div>
         <div class="label">Експерт • маркетинг • бізнес • e-commerce</div>
@@ -326,11 +391,20 @@
       </div>
     </section>
 
-    <section class="section cta">
+    <section class="section cta" id="contacts">
       <h2 class="section-title">Працюємо на результат</h2>
       <p>Якщо хочеш зрозумілу систему, сильніший маркетинг і продукти, які реально продаються — тут буде точка входу в роботу зі мною та моїми курсами.</p>
       <a class="btn btn-primary" href="#courses">Перейти до курсів</a>
     </section>
+
+    <footer class="footer">
+      <div>© 2026 Анатолій Маліновський</div>
+      <div class="footer-links">
+        <a href="#about">Про мене</a>
+        <a href="#courses">Курси</a>
+        <a href="#contacts">Контакти</a>
+      </div>
+    </footer>
   </main>
 </body>
 </html>
