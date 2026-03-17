@@ -3,73 +3,319 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Курс Анатолія Маліновського</title>
+  <title>Анатолій Маліновський — експерт</title>
   <style>
     * { box-sizing: border-box; }
+    :root {
+      --bg: #f7f4ef;
+      --text: #101010;
+      --muted: #5b5b5b;
+      --red: #ef4136;
+      --red-dark: #d9342b;
+      --card: #ffffff;
+      --line: rgba(239, 65, 54, 0.18);
+      --shadow: 0 18px 50px rgba(0,0,0,.08);
+    }
     body {
       margin: 0;
-      font-family: Inter, Arial, sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(239,65,54,.12), transparent 22%),
+        radial-gradient(circle at 85% 70%, rgba(239,65,54,.10), transparent 20%),
+        var(--bg);
     }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 64px; }
     .hero {
-      width: 100%;
-      max-width: 900px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      backdrop-filter: blur(12px);
-      border-radius: 28px;
-      padding: 56px 40px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-      text-align: center;
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 28px;
+      position: relative;
     }
-    .badge {
+    .label {
       display: inline-block;
-      padding: 10px 16px;
+      background: var(--red);
+      color: #fff;
+      padding: 10px 18px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.12);
       font-size: 14px;
-      margin-bottom: 20px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 24px rgba(239,65,54,.25);
     }
     h1 {
-      font-size: clamp(36px, 7vw, 68px);
-      line-height: 1.05;
-      margin: 0 0 16px;
+      margin: 0 0 18px;
+      font-size: clamp(46px, 8vw, 92px);
+      line-height: .95;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      max-width: 720px;
     }
-    p {
-      margin: 0 auto 28px;
-      max-width: 640px;
-      font-size: 18px;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.84);
+    .accent { color: var(--red); }
+    .sub {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.55;
+      margin-bottom: 28px;
     }
-    .button {
+    .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
       display: inline-block;
-      padding: 16px 26px;
-      border-radius: 14px;
-      background: #22c55e;
-      color: #08110c;
+      padding: 16px 24px;
+      border-radius: 16px;
       text-decoration: none;
       font-weight: 700;
-      transition: transform .2s ease, box-shadow .2s ease;
-      box-shadow: 0 10px 30px rgba(34, 197, 94, 0.35);
+      transition: .2s ease;
     }
-    .button:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(239,65,54,.24);
+    }
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .btn-secondary {
+      color: var(--text);
+      border: 2px solid #111;
+      background: transparent;
+    }
+    .portrait {
+      position: relative;
+      background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 20%, var(--red) 100%);
+      border-radius: 34px;
+      min-height: 620px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 26px;
+    }
+    .portrait::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -35% auto;
+      width: 420px;
+      height: 420px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 50%;
+      box-shadow: 0 0 0 45px rgba(255,255,255,.07), 0 0 0 95px rgba(255,255,255,.05);
+    }
+    .portrait-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      background: rgba(255,255,255,.92);
+      border-radius: 24px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+    }
+    .portrait-card h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      text-transform: uppercase;
+    }
+    .portrait-card p { margin: 0; color: var(--muted); line-height: 1.5; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .stat {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 24px 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,.04);
+    }
+    .stat strong {
+      display: block;
+      font-size: 34px;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+    .section {
+      margin-top: 42px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(0,0,0,.04);
+      border-radius: 32px;
+      padding: 42px 28px;
+      box-shadow: var(--shadow);
+    }
+    .section-title {
+      margin: 0 0 24px;
+      font-size: clamp(30px, 5vw, 58px);
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(0,0,0,.05);
+    }
+    .card .mini {
+      display: inline-block;
+      background: #ffe2df;
+      color: var(--red);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .card h3 { margin: 0 0 10px; font-size: 24px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.6; }
+    .rings {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(180deg, #fff 0%, #fff9f8 100%);
+    }
+    .rings::before,
+    .rings::after {
+      content: "";
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid var(--line);
+    }
+    .rings::before { width: 520px; height: 520px; box-shadow: 0 0 0 80px var(--line), 0 0 0 160px rgba(239,65,54,.08); }
+    .rings::after { width: 260px; height: 260px; }
+    .rings .content { position: relative; z-index: 1; }
+    .chips {
+      display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 18px;
+    }
+    .chip {
+      background: var(--red);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .courses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .course {
+      background: linear-gradient(180deg, #fff 0%, #fff6f5 100%);
+      border-radius: 26px;
+      padding: 24px;
+      border: 1px solid rgba(239,65,54,.14);
+    }
+    .course a { color: var(--red); text-decoration: none; font-weight: 700; }
+    .cta {
+      background: linear-gradient(135deg, #111 0%, #2a2a2a 35%, var(--red) 100%);
+      color: #fff;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .cta p { color: rgba(255,255,255,.86); max-width: 700px; margin: 0 auto 24px; line-height: 1.6; }
+    @media (max-width: 980px) {
+      .hero, .stats, .grid-3, .courses { grid-template-columns: 1fr; }
+      .portrait { min-height: 420px; }
+    }
   </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="badge">Простий тестовий лендінг 🚀</div>
-    <h1>Курс Анатолія Маліновського</h1>
-    <p>
-      Допоможу тобі швидше зрости через практичні інструменти, системний підхід і зрозумілі кроки без води.
-    </p>
-    <a class="button" href="#">Хочу дізнатись більше</a>
-  </section>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="label">Експерт • маркетинг • бізнес • e-commerce</div>
+        <h1>Анатолій <span class="accent">Маліновський</span></h1>
+        <div class="sub">
+          Допомагаю будувати системний маркетинг, запускати продукти, рости в e-commerce та перетворювати хаос у зрозумілу бізнес-модель.
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href="#courses">Переглянути курси</a>
+          <a class="btn btn-secondary" href="#about">Про мене</a>
+        </div>
+      </div>
+      <div class="portrait">
+        <div class="portrait-card">
+          <h2>Про мене</h2>
+          <p>Головний “Знаєш чому”, Co-Founder & CEO “Aimo”. Головний фокус — практичний маркетинг, побудова бізнес-систем і масштабування через зрозумілі рішення.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><strong>7+</strong><span>років у маркетингу</span></div>
+      <div class="stat"><strong>12+</strong><span>років у бізнесі загалом</span></div>
+      <div class="stat"><strong>24+</strong><span>ніші та напрямки в роботі</span></div>
+      <div class="stat"><strong>350+</strong><span>реалізованих проєктів</span></div>
+    </section>
+
+    <section class="section" id="about">
+      <h2 class="section-title">Чим я можу бути корисний</h2>
+      <div class="grid-3">
+        <article class="card">
+          <div class="mini">01</div>
+          <h3>Маркетинг</h3>
+          <p>Стратегія, позиціонування, контент, запуск воронок і системна робота з трафіком без хаотичних дій.</p>
+        </article>
+        <article class="card">
+          <div class="mini">02</div>
+          <h3>Бізнес</h3>
+          <p>Допомагаю розкласти бізнес по поличках: офер, структура продукту, логіка продажів і точки росту.</p>
+        </article>
+        <article class="card">
+          <div class="mini">03</div>
+          <h3>E-commerce</h3>
+          <p>Практичний досвід запуску та росту онлайн-продажів, інтернет-магазинів і digital-продуктів.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section rings">
+      <div class="content">
+        <div class="label">Практика, а не теорія</div>
+        <h2 class="section-title">Мій досвід</h2>
+        <div class="chips">
+          <span class="chip">Бізнес з нуля</span>
+          <span class="chip">Власний e-commerce</span>
+          <span class="chip">Сотні проєктів</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="courses">
+      <h2 class="section-title">Курси</h2>
+      <div class="courses">
+        <article class="course">
+          <div class="mini">Курс 01</div>
+          <h3>Власний інтернет-магазин за 2 роки</h3>
+          <p>Невеликі кроки до великих змін. Практичний курс про запуск, системність і ріст.</p>
+          <br><a href="#">Окрема сторінка курсу →</a>
+        </article>
+        <article class="course">
+          <div class="mini">Курс 02</div>
+          <h3>Тут буде наступний курс</h3>
+          <p>Блок-заглушка для майбутнього продукту. Потім винесемо на окремий лендинг.</p>
+          <br><a href="#">Додати пізніше →</a>
+        </article>
+        <article class="course">
+          <div class="mini">Курс 03</div>
+          <h3>Ще один продукт</h3>
+          <p>Тут буде ще один курс, менторська програма або окремий освітній продукт.</p>
+          <br><a href="#">Додати пізніше →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section cta">
+      <h2 class="section-title">Працюємо на результат</h2>
+      <p>Якщо хочеш зрозумілу систему, сильніший маркетинг і продукти, які реально продаються — тут буде точка входу в роботу зі мною та моїми курсами.</p>
+      <a class="btn btn-primary" href="#courses">Перейти до курсів</a>
+    </section>
+  </main>
 </body>
 </html>
