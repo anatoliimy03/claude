@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Власний інтернет-магазин за 21 урок — Анатолій Маліновський</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #f7f4ef;
+      --text: #101010;
+      --muted: #5b5b5b;
+      --red: #ef4136;
+      --red-dark: #d9342b;
+      --card: #ffffff;
+      --line: rgba(239, 65, 54, 0.18);
+      --shadow: 0 18px 50px rgba(0,0,0,.08);
+      --dark: #161616;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(239,65,54,.12), transparent 22%),
+        radial-gradient(circle at 85% 70%, rgba(239,65,54,.10), transparent 20%),
+        var(--bg);
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 110px; }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.05);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 14px;
+      z-index: 40;
+      backdrop-filter: blur(10px);
+    }
+    .brand { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; text-transform: uppercase; text-decoration: none; color: var(--text); }
+    .brand span { color: var(--red); }
+    .nav { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+    .nav a { color: var(--text); text-decoration: none; font-weight: 700; font-size: 14px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .hero-main, .hero-side {
+      background: rgba(255,255,255,.76);
+      border: 1px solid rgba(0,0,0,.05);
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-main { padding: 42px 34px; }
+    .label {
+      display:inline-block;
+      background: var(--red);
+      color:#fff;
+      padding:10px 18px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:18px;
+      box-shadow: 0 10px 24px rgba(239,65,54,.25);
+    }
+    h1 {
+      margin:0 0 18px;
+      font-size: clamp(42px, 6vw, 78px);
+      line-height: .95;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+    .accent { color: var(--red); }
+    .sub {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.55;
+      margin-bottom: 22px;
+    }
+    .hero-points { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; margin: 0 0 24px; }
+    .point {
+      background:#fff;
+      border-radius:18px;
+      padding:16px 16px;
+      border:1px solid rgba(0,0,0,.04);
+      font-weight:700;
+      line-height:1.45;
+    }
+    .actions { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+    .btn {
+      display:inline-block;
+      padding:16px 24px;
+      border-radius:16px;
+      text-decoration:none;
+      font-weight:700;
+      transition:.2s ease;
+    }
+    .btn-primary { background: var(--red); color:#fff; box-shadow:0 14px 28px rgba(239,65,54,.24); }
+    .btn-primary:hover { background: var(--red-dark); transform:translateY(-2px); }
+    .btn-secondary { color: var(--text); border:2px solid #111; background:transparent; }
+    .price-chip {
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: #111;
+      color: #fff;
+      font-weight: 800;
+    }
+    .hero-side {
+      position: relative;
+      display:flex;
+      min-height: 760px;
+      background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 18%, var(--red) 100%);
+    }
+    .hero-side img {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top;
+    }
+    .hero-side::after {
+      content:""; position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.06) 0%, rgba(0,0,0,.22) 55%, rgba(0,0,0,.56) 100%);
+    }
+    .offer-box {
+      position:relative; z-index:2; margin:auto 24px 24px; width:calc(100% - 48px);
+      background: rgba(255,255,255,.93); border-radius:24px; padding:22px;
+    }
+    .offer-box h3 { margin:0 0 10px; font-size:26px; text-transform:uppercase; }
+    .offer-box p { margin:0; color:var(--muted); line-height:1.55; }
+    .section {
+      margin-top: 26px;
+      background: rgba(255,255,255,.74);
+      border: 1px solid rgba(0,0,0,.04);
+      border-radius: 32px;
+      padding: 38px 28px;
+      box-shadow: var(--shadow);
+    }
+    .section-title {
+      margin:0 0 24px;
+      font-size: clamp(28px, 5vw, 56px);
+      line-height: .96;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+    .card {
+      background:#fff; border-radius:24px; padding:24px; border:1px solid rgba(0,0,0,.05);
+    }
+    .mini { display:inline-block; background:#ffe2df; color:var(--red); padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; margin-bottom:14px; }
+    .card h3 { margin:0 0 10px; font-size:24px; }
+    .card p, .card li { margin:0; color:var(--muted); line-height:1.6; }
+    .card ul { margin:0; padding-left:20px; display:grid; gap:10px; }
+    .dark-band {
+      position:relative; overflow:hidden; text-align:center; padding:72px 20px;
+      background: linear-gradient(180deg, #181818 0%, #272727 100%); color:#fff;
+    }
+    .dark-band::before,
+    .dark-band::after {
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; border:1px solid rgba(255,255,255,.12);
+    }
+    .dark-band::before { width:520px; height:520px; box-shadow:0 0 0 80px rgba(255,255,255,.04),0 0 0 160px rgba(255,255,255,.02); }
+    .dark-band::after { width:260px; height:260px; }
+    .dark-band .inner { position:relative; z-index:1; }
+    .chips { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:18px; }
+    .chip { background:var(--red); color:#fff; padding:10px 16px; border-radius:999px; font-weight:700; font-size:14px; }
+    .lesson-list { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    .lesson {
+      background:linear-gradient(180deg,#fff 0%,#fff6f5 100%);
+      border-radius:24px; padding:22px; border:1px solid rgba(239,65,54,.14);
+    }
+    .lesson strong { display:block; font-size:22px; margin-bottom:10px; }
+    .lesson p { margin:0 0 10px; color:var(--muted); line-height:1.6; }
+    .faq { display:grid; gap:14px; }
+    .faq-item { background:#fff; border-radius:22px; padding:22px; border:1px solid rgba(0,0,0,.05); }
+    .faq-item strong { display:block; margin-bottom:10px; font-size:20px; }
+    .sticky-cta {
+      position:fixed; left:20px; right:20px; bottom:18px; z-index:50;
+      background:#ffd84d; color:#111; border-radius:20px; padding:14px 18px;
+      box-shadow:0 18px 50px rgba(0,0,0,.18);
+      display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+    }
+    .sticky-cta strong { font-size:18px; }
+    .footer {
+      margin-top:22px; display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+      padding:22px 8px 8px; color:var(--muted); font-size:14px;
+    }
+    .footer-links { display:flex; gap:14px; flex-wrap:wrap; }
+    .footer a { color:var(--text); text-decoration:none; font-weight:700; }
+    @media (max-width: 980px) {
+      .hero, .grid-3, .grid-2, .lesson-list, .hero-points { grid-template-columns:1fr; }
+      .hero-side { min-height: 480px; }
+      .sticky-cta { left:12px; right:12px; bottom:12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <a class="brand" href="../../index.html">Анатолій <span>Маліновський</span></a>
+      <nav class="nav">
+        <a href="#about-course">Про курс</a>
+        <a href="#program">Програма</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-main">
+        <div class="label">Курс • запуск з нуля • e-commerce</div>
+        <h1>Власний інтернет-магазин <span class="accent">за 21 урок</span></h1>
+        <div class="sub">
+          Покроковий курс для тих, хто хоче запустити свій інтернет-магазин з нуля — навіть якщо ще немає товару, досвіду чи технічної бази.
+        </div>
+        <div class="hero-points">
+          <div class="point">21 урок у системній логіці: від ідеї до запуску магазину</div>
+          <div class="point">Пояснення простими словами без перевантаження технічними термінами</div>
+          <div class="point">Окремий фокус на Aima, товарах, оплаті, доставці й аналітиці</div>
+          <div class="point">Реальний план перших продажів і розуміння, як не зливати бюджет</div>
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href="#buy">Хочу доступ до курсу</a>
+          <a class="btn btn-secondary" href="#program">Переглянути програму</a>
+          <div class="price-chip">Ціна: уточнюється 👌</div>
+        </div>
+      </div>
+      <div class="hero-side">
+        <img src="../../assets/anatolii.jpg" alt="Анатолій Маліновський" />
+        <div class="offer-box" id="buy">
+          <h3>Що отримує учень</h3>
+          <p>Покрокову систему запуску інтернет-магазину, чітку структуру дій, розбір типових помилок, розуміння платформи Aima та план отримання перших продажів.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about-course">
+      <h2 class="section-title">Для кого цей курс</h2>
+      <div class="grid-3">
+        <article class="card"><div class="mini">01</div><h3>Для новачків</h3><p>Якщо хочеш запустити свій перший інтернет-магазин, але не знаєш, з чого почати.</p></article>
+        <article class="card"><div class="mini">02</div><h3>Без товару і досвіду</h3><p>Якщо поки немає свого продукту, постачальника чи технічного бекграунду — курс дає варіанти старту.</p></article>
+        <article class="card"><div class="mini">03</div><h3>Для тих, хто хоче систему</h3><p>Якщо потрібен не хаос, а зрозуміла логіка запуску: ніша, товари, магазин, трафік, перші продажі.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Про автора</h2>
+      <div class="grid-2">
+        <article class="card">
+          <div class="mini">Експертність</div>
+          <h3>Анатолій Маліновський</h3>
+          <p>Практик, який пройшов шлях від запусків з нуля до власних бізнес-напрямків та e-commerce проєктів. У курсі — не теорія заради теорії, а реальний досвід, адаптований під старт з нуля.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Що підсвічуємо</div>
+          <ul>
+            <li>20+ бізнес-напрямків і практичний досвід запусків</li>
+            <li>власний досвід з інтернет-магазинами</li>
+            <li>системний підхід маленькими кроками</li>
+            <li>фокус на тому, що реально потрібно для старту</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section dark-band">
+      <div class="inner">
+        <div class="label">Результат, а не просто уроки</div>
+        <h2 class="section-title">Що буде після курсу</h2>
+        <div class="chips">
+          <span class="chip">Розуміння, що продавати</span>
+          <span class="chip">Готовий магазин</span>
+          <span class="chip">Перший план продажів</span>
+          <span class="chip">Системний запуск</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Що входить у курс</h2>
+      <div class="grid-3">
+        <article class="card"><div class="mini">Блок 1</div><h3>Стратегія старту</h3><p>Вибір ніші, товару, моделі запуску та план дій, якщо в тебе ще нічого немає.</p></article>
+        <article class="card"><div class="mini">Блок 2</div><h3>Створення магазину</h3><p>Aima, структура магазину, логотип, фавікон, банери, категорії, товари, головна сторінка.</p></article>
+        <article class="card"><div class="mini">Блок 3</div><h3>Запуск і продажі</h3><p>Доставка, оплата, домен, аналітика, безкоштовні та платні продажі, контроль реклами й обробка замовлень.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Ваші результати після курсу</h2>
+      <div class="grid-2">
+        <article class="card"><div class="mini">Після проходження</div><ul>
+          <li>зрозумієш, який бізнес і товар варто запускати саме тобі</li>
+          <li>перестанеш боятись термінів та технічної частини</li>
+          <li>створиш і нормально оформиш власний магазин</li>
+          <li>налаштуєш товари, категорії, доставку та оплату</li>
+        </ul></article>
+        <article class="card"><div class="mini">Практичний ефект</div><ul>
+          <li>підключиш домен і аналітику</li>
+          <li>отримаєш базовий план перших продажів</li>
+          <li>зрозумієш, як працювати з платним трафіком без хаосу</li>
+          <li>побачиш типові помилки, через які новачки втрачають гроші</li>
+        </ul></article>
+      </div>
+    </section>
+
+    <section class="section" id="program">
+      <h2 class="section-title">Програма курсу</h2>
+      <div class="lesson-list">
+        <article class="lesson"><strong>Урок 1</strong><p>Про автора курсу та організаційні моменти.</p><p>Результат: знайомство з автором і логікою проходження курсу.</p></article>
+        <article class="lesson"><strong>Урок 2</strong><p>Для якого бізнесу підходить інтернет-магазин.</p><p>Результат: розуміння, що саме запускати.</p></article>
+        <article class="lesson"><strong>Урок 3</strong><p>Які товари реально варто продавати початківцю.</p><p>Результат: відсікаєш слабкі ідеї.</p></article>
+        <article class="lesson"><strong>Урок 4</strong><p>Що робити, якщо немає ні товару, ні досвіду.</p><p>Результат: з’являється реальний план дій.</p></article>
+        <article class="lesson"><strong>Урок 5</strong><p>Про інтернет-магазин простими словами.</p><p>Результат: більше не боїшся термінів.</p></article>
+        <article class="lesson"><strong>Урок 6</strong><p>Процес створення інтернет-магазину.</p><p>Результат: бачиш повну дорожню карту запуску.</p></article>
+        <article class="lesson"><strong>Урок 7</strong><p>Огляд платформи Aima.</p><p>Результат: розумієш ключові можливості платформи.</p></article>
+        <article class="lesson"><strong>Урок 8</strong><p>Логотип і фавікон без дизайнерів.</p><p>Результат: магазин виглядає охайно і впізнавано.</p></article>
+        <article class="lesson"><strong>Урок 9</strong><p>Додавання товарів і категорій.</p><p>Результат: у магазині є що продавати.</p></article>
+        <article class="lesson"><strong>Урок 10</strong><p>Банери і базовий візуал.</p><p>Результат: магазин не виглядає порожнім.</p></article>
+        <article class="lesson"><strong>Урок 11</strong><p>Налаштування доставки і оплати.</p><p>Результат: клієнт може отримати товар і оплатити його.</p></article>
+        <article class="lesson"><strong>Урок 12</strong><p>Налаштування головної сторінки та інше.</p><p>Результат: магазин виглядає серйозно.</p></article>
+        <article class="lesson"><strong>Урок 13</strong><p>Підключення власного домену.</p><p>Результат: фінальний вигляд магазину.</p></article>
+        <article class="lesson"><strong>Урок 14</strong><p>Аналітика: для чого потрібна та як поставити.</p><p>Результат: бачиш, що відбувається в магазині.</p></article>
+        <article class="lesson"><strong>Урок 15</strong><p>Типові помилки початківців на старті.</p><p>Результат: знаєш, де найчастіше зливаються.</p></article>
+        <article class="lesson"><strong>Урок 16</strong><p>Як отримати перші продажі.</p><p>Результат: маєш чіткий план перших грошей.</p></article>
+        <article class="lesson"><strong>Урок 17</strong><p>Платні джерела клієнтів і контроль реклами.</p><p>Результат: не зливаєш гроші в трафік без контролю.</p></article>
+        <article class="lesson"><strong>Урок 18</strong><p>Обробка замовлень: як не втрачати клієнтів.</p><p>Результат: будуєш систему роботи із замовленнями.</p></article>
+        <article class="lesson"><strong>Урок 19</strong><p>Чому одні магазини продають, а інші ні.</p><p>Результат: розумієш роль довіри, ціни й наповнення.</p></article>
+        <article class="lesson"><strong>Урок 20</strong><p>Огляди інтернет-магазинів.</p><p>Результат: бачиш стандарт, до якого варто йти.</p></article>
+        <article class="lesson"><strong>Урок 21</strong><p>Підсумки запуску і подальший рух.</p><p>Результат: є розуміння наступних кроків після старту.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Поширені питання</h2>
+      <div class="faq" id="faq">
+        <div class="faq-item"><strong>Чи підійде курс, якщо я повний новачок?</strong><div>Так. Курс якраз зібраний для старту з нуля: без досвіду, без товару і без складної технічної бази.</div></div>
+        <div class="faq-item"><strong>Чи підійде курс, якщо в мене ще немає товару?</strong><div>Так. У програмі є окремі уроки про вибір товару, нішування, пошук постачальників і варіанти старту.</div></div>
+        <div class="faq-item"><strong>На чому створюється магазин?</strong><div>Основний акцент у курсі — на платформі Aima, щоб дати простий і зрозумілий шлях запуску.</div></div>
+        <div class="faq-item"><strong>Коли я побачу результат?</strong><div>Якщо йти по системі “1 день = 1 урок”, то дуже швидко дійдеш до робочого магазину та плану перших продажів.</div></div>
+      </div>
+    </section>
+
+    <section class="section" style="text-align:center;" id="contacts">
+      <h2 class="section-title">Готовий запустити свій магазин?</h2>
+      <p class="sub" style="margin:0 auto 24px; max-width:760px;">Це окрема сторінка курсу в продаючій логіці. Далі можемо підставити ціну, форму, оплату, бонуси, відгуки і зробити її ще сильнішою по конверсії.</p>
+      <div class="actions" style="justify-content:center;">
+        <a class="btn btn-primary" href="#buy">Хочу доступ до курсу</a>
+        <a class="btn btn-secondary" href="../../index.html">Повернутись на головну</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>© 2026 Анатолій Маліновський</div>
+      <div class="footer-links">
+        <a href="../../index.html">Головна</a>
+        <a href="#program">Програма</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </footer>
+  </main>
+
+  <div class="sticky-cta">
+    <strong>Власний інтернет-магазин за 21 урок</strong>
+    <a class="btn btn-primary" href="#buy" style="padding:12px 18px;">Отримати доступ</a>
+  </div>
+</body>
+</html>
