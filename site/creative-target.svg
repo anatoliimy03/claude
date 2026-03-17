@@ -1,0 +1,60 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1080" y2="1350" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FCF7F2"/>
+      <stop offset="1" stop-color="#F5EEE7"/>
+    </linearGradient>
+    <linearGradient id="redGlow" x1="780" y1="180" x2="1040" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EF4136" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#EF4136" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="2000" height="2000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="30" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <clipPath id="photoClip">
+      <rect x="600" y="215" width="360" height="470" rx="36"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1080" height="1350" fill="url(#bg)"/>
+  <circle cx="900" cy="260" r="210" fill="url(#redGlow)"/>
+  <circle cx="180" cy="1180" r="220" fill="#EF4136" fill-opacity="0.08"/>
+
+  <rect x="60" y="52" width="960" height="88" rx="28" fill="white" fill-opacity="0.82"/>
+  <text x="110" y="106" fill="#111111" font-size="34" font-weight="800" font-family="Arial, Helvetica, sans-serif">Анатолій <tspan fill="#EF4136">Маліновський</tspan></text>
+  <text x="833" y="106" fill="#555555" font-size="24" font-weight="700" font-family="Arial, Helvetica, sans-serif">експерт • маркетинг</text>
+
+  <rect x="72" y="190" width="210" height="54" rx="27" fill="#EF4136"/>
+  <text x="108" y="225" fill="white" font-size="24" font-weight="700" font-family="Arial, Helvetica, sans-serif">НОВИЙ ФОРМАТ</text>
+
+  <text x="72" y="350" fill="#111111" font-size="92" font-weight="900" font-family="Arial, Helvetica, sans-serif">БУДУЄШ</text>
+  <text x="72" y="445" fill="#111111" font-size="92" font-weight="900" font-family="Arial, Helvetica, sans-serif">БІЗНЕС</text>
+  <text x="72" y="540" fill="#EF4136" font-size="92" font-weight="900" font-family="Arial, Helvetica, sans-serif">БЕЗ СИСТЕМИ?</text>
+
+  <text x="72" y="638" fill="#555555" font-size="34" font-weight="400" font-family="Arial, Helvetica, sans-serif">Поясню, як навести порядок у маркетингу,</text>
+  <text x="72" y="682" fill="#555555" font-size="34" font-weight="400" font-family="Arial, Helvetica, sans-serif">офері, продажах і рости без хаосу 👌</text>
+
+  <g filter="url(#shadow)">
+    <rect x="600" y="215" width="360" height="470" rx="36" fill="#1A1A1A"/>
+    <image href="assets/anatolii.jpg" x="600" y="215" width="360" height="470" preserveAspectRatio="xMidYMid slice" clip-path="url(#photoClip)"/>
+    <rect x="600" y="215" width="360" height="470" rx="36" fill="url(#redGlow)" fill-opacity="0.25"/>
+  </g>
+
+  <rect x="72" y="770" width="936" height="170" rx="34" fill="white" filter="url(#shadow)"/>
+  <text x="118" y="835" fill="#EF4136" font-size="26" font-weight="800" font-family="Arial, Helvetica, sans-serif">ЩО ВСЕРЕДИНІ</text>
+  <text x="118" y="888" fill="#111111" font-size="34" font-weight="700" font-family="Arial, Helvetica, sans-serif">• системний маркетинг</text>
+  <text x="118" y="932" fill="#111111" font-size="34" font-weight="700" font-family="Arial, Helvetica, sans-serif">• позиціонування та офер</text>
+  <text x="560" y="888" fill="#111111" font-size="34" font-weight="700" font-family="Arial, Helvetica, sans-serif">• структура продукту</text>
+  <text x="560" y="932" fill="#111111" font-size="34" font-weight="700" font-family="Arial, Helvetica, sans-serif">• логіка росту і продажів</text>
+
+  <rect x="72" y="995" width="520" height="168" rx="34" fill="#EF4136"/>
+  <text x="118" y="1066" fill="white" font-size="30" font-weight="800" font-family="Arial, Helvetica, sans-serif">ПЕРЕЙТИ НА САЙТ</text>
+  <text x="118" y="1110" fill="white" font-size="48" font-weight="900" font-family="Arial, Helvetica, sans-serif">anatolii-brand.site</text>
+
+  <rect x="620" y="995" width="388" height="168" rx="34" fill="#111111"/>
+  <text x="662" y="1062" fill="white" font-size="26" font-weight="700" font-family="Arial, Helvetica, sans-serif">ФОРМАТ</text>
+  <text x="662" y="1112" fill="#FFFFFF" font-size="42" font-weight="900" font-family="Arial, Helvetica, sans-serif">КУРСИ +</text>
+  <text x="662" y="1154" fill="#EF4136" font-size="42" font-weight="900" font-family="Arial, Helvetica, sans-serif">ЕКСПЕРТНИЙ БРЕНД</text>
+
+  <text x="72" y="1258" fill="#777777" font-size="24" font-weight="700" font-family="Arial, Helvetica, sans-serif">Креатив для таргету • 1080×1350</text>
+</svg>
