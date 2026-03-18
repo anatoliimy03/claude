@@ -1,0 +1,73 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#F5F0E8"/>
+  <rect x="40" y="80" width="1520" height="760" rx="24" fill="#FBF8F3" stroke="#D9CFC1" stroke-width="4"/>
+
+  <!-- facade blocks -->
+  <rect x="90" y="160" width="520" height="520" rx="12" fill="#F9F6F0" stroke="#2A2A2A" stroke-width="10"/>
+  <rect x="1030" y="160" width="330" height="520" rx="12" fill="#F9F6F0" stroke="#2A2A2A" stroke-width="10"/>
+  <rect x="1360" y="160" width="150" height="520" rx="12" fill="#F9F6F0" stroke="#2A2A2A" stroke-width="10"/>
+  <rect x="610" y="160" width="420" height="520" rx="12" fill="#B17B4A" stroke="#7A4E2B" stroke-width="10"/>
+  <rect x="705" y="245" width="230" height="435" rx="10" fill="#C9925D" stroke="#7A4E2B" stroke-width="8"/>
+  <circle cx="820" cy="470" r="9" fill="#6B3F1F"/>
+
+  <!-- title -->
+  <rect x="90" y="100" width="640" height="44" rx="22" fill="#EF4136"/>
+  <text x="114" y="129" fill="white" font-size="28" font-weight="700" font-family="Arial, Helvetica, sans-serif">КОНЦЕПТ: МІНІ ПРЯНИКОВА ВУЛИЦЯ ДО ВЕЛИКОДНЯ</text>
+
+  <!-- left main display -->
+  <rect x="125" y="515" width="450" height="130" rx="20" fill="#ECE2D3"/>
+  <ellipse cx="350" cy="635" rx="210" ry="18" fill="#D8C9B5"/>
+
+  <!-- houses -->
+  <g>
+    <rect x="165" y="430" width="90" height="95" rx="12" fill="#C98A52" stroke="#8B5A34" stroke-width="4"/>
+    <path d="M155 435L210 385L265 435" fill="#A85C3A" stroke="#8B4A30" stroke-width="4"/>
+    <rect x="186" y="463" width="16" height="22" rx="4" fill="#FFF4D6"/>
+    <rect x="217" y="463" width="16" height="22" rx="4" fill="#FFF4D6"/>
+    <path d="M164 432C176 422 192 420 209 420C226 420 241 423 255 432" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g>
+    <rect x="255" y="395" width="120" height="130" rx="14" fill="#D09359" stroke="#8B5A34" stroke-width="4"/>
+    <path d="M242 400L315 340L388 400" fill="#B86540" stroke="#8B4A30" stroke-width="4"/>
+    <rect x="282" y="438" width="18" height="24" rx="4" fill="#FFF4D6"/>
+    <rect x="329" y="438" width="18" height="24" rx="4" fill="#FFF4D6"/>
+    <path d="M250 396C268 384 290 382 314 382C338 382 359 385 380 396" stroke="white" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g>
+    <rect x="388" y="430" width="110" height="95" rx="12" fill="#C98A52" stroke="#8B5A34" stroke-width="4"/>
+    <path d="M376 434L443 378L510 434" fill="#A85C3A" stroke="#8B4A30" stroke-width="4"/>
+    <rect x="415" y="463" width="16" height="22" rx="4" fill="#FFF4D6"/>
+    <rect x="448" y="463" width="16" height="22" rx="4" fill="#FFF4D6"/>
+    <path d="M385 430C401 420 420 418 442 418C463 418 482 421 500 430" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- eggs/rabbits/trees left -->
+  <ellipse cx="190" cy="590" rx="22" ry="30" fill="#F4D77D"/>
+  <ellipse cx="235" cy="592" rx="20" ry="28" fill="#F7B6A6"/>
+  <ellipse cx="520" cy="592" rx="22" ry="30" fill="#C9E3A1"/>
+  <ellipse cx="480" cy="598" rx="16" ry="22" fill="#FFF3D9"/>
+  <path d="M520 550C520 530 542 518 558 530C566 506 596 514 594 538C612 532 624 552 612 565C627 576 620 598 598 598H540C520 598 508 582 520 566C509 560 510 552 520 550Z" fill="#BFD7A0"/>
+  <path d="M153 557C153 535 176 522 192 534C200 510 230 518 229 542C246 536 257 555 247 568C261 580 254 600 233 600H175C157 600 145 584 153 570C143 563 144 556 153 557Z" fill="#C7DDA9"/>
+  <ellipse cx="316" cy="604" rx="18" ry="14" fill="#EDE5D8"/>
+  <circle cx="308" cy="594" r="10" fill="#F4EFE7"/>
+  <rect x="299" y="574" width="8" height="18" rx="4" fill="#F4EFE7"/>
+  <rect x="313" y="572" width="8" height="20" rx="4" fill="#F4EFE7"/>
+
+  <!-- right window decor -->
+  <rect x="1060" y="520" width="270" height="120" rx="20" fill="#ECE2D3"/>
+  <ellipse cx="1195" cy="635" rx="120" ry="14" fill="#D8C9B5"/>
+  <g>
+    <rect x="1110" y="410" width="90" height="110" rx="14" fill="#CF9157" stroke="#8B5A34" stroke-width="4"/>
+    <path d="M1098 415L1155 365L1212 415" fill="#B86540" stroke="#8B4A30" stroke-width="4"/>
+    <path d="M1108 410C1122 399 1139 397 1156 397C1176 397 1192 400 1204 410" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <ellipse cx="1270" cy="575" rx="34" ry="46" fill="#F4D77D"/>
+  <ellipse cx="1226" cy="584" rx="24" ry="32" fill="#F7B6A6"/>
+  <path d="M1265 468C1265 445 1289 431 1308 444C1318 416 1352 425 1349 452C1371 445 1386 469 1371 484C1389 498 1378 523 1353 523H1287C1265 523 1250 503 1265 485C1251 477 1252 469 1265 468Z" fill="#BFD7A0"/>
+
+  <!-- notes -->
+  <rect x="90" y="715" width="1420" height="88" rx="20" fill="white" stroke="#E3D8CA" stroke-width="2"/>
+  <text x="120" y="750" fill="#111" font-size="28" font-weight="700" font-family="Arial, Helvetica, sans-serif">ІДЕЯ:</text>
+  <text x="220" y="750" fill="#444" font-size="26" font-family="Arial, Helvetica, sans-serif">ліва вітрина — головна міні-вулиця з 4–7 будиночками, праве вікно — підтримуюча композиція з одним будиночком, яйцями та зеленню.</text>
+  <text x="120" y="786" fill="#444" font-size="24" font-family="Arial, Helvetica, sans-serif">Кольори: пряниковий, кремовий, білий, пастельно-жовтий, ніжно-зелений. Додати теплу підсвітку всередині будиночків ✨</text>
+</svg>
