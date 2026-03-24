@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMM Planner MVP</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #f7f4ef;
+      --text: #101010;
+      --muted: #5b5b5b;
+      --red: #ef4136;
+      --red-dark: #d9342b;
+      --card: #ffffff;
+      --line: rgba(239, 65, 54, 0.18);
+      --shadow: 0 18px 50px rgba(0,0,0,.08);
+      --green: #1f9d61;
+      --yellow: #ffd84d;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(239,65,54,.12), transparent 22%),
+        radial-gradient(circle at 85% 70%, rgba(239,65,54,.10), transparent 20%),
+        var(--bg);
+    }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 24px 18px 48px; }
+    .header {
+      display:flex; align-items:center; justify-content:space-between; gap:20px;
+      padding:14px 18px; margin-bottom:18px; background:rgba(255,255,255,.78);
+      border:1px solid rgba(0,0,0,.05); border-radius:22px; box-shadow:var(--shadow);
+      position:sticky; top:14px; z-index:30; backdrop-filter: blur(10px);
+    }
+    .brand { font-weight:800; font-size:18px; text-transform:uppercase; letter-spacing:-0.02em; }
+    .brand span { color:var(--red); }
+    .top-actions { display:flex; gap:12px; flex-wrap:wrap; }
+    .btn {
+      border:none; cursor:pointer; padding:14px 18px; border-radius:14px; font-weight:700;
+      text-decoration:none; display:inline-flex; align-items:center; gap:8px; font-size:14px;
+    }
+    .btn-primary { background:var(--red); color:#fff; box-shadow:0 14px 28px rgba(239,65,54,.24); }
+    .btn-primary:hover { background:var(--red-dark); }
+    .btn-secondary { background:#fff; color:var(--text); border:1px solid rgba(0,0,0,.08); }
+    .hero {
+      display:grid; grid-template-columns: 1.1fr .9fr; gap:18px; margin-bottom:18px;
+    }
+    .hero-card, .panel, .calendar-shell, .side-shell {
+      background: rgba(255,255,255,.75); border:1px solid rgba(0,0,0,.05); border-radius:28px; box-shadow:var(--shadow);
+    }
+    .hero-card { padding:30px; }
+    .hero-card h1 {
+      margin:0 0 16px; font-size: clamp(38px, 6vw, 72px); line-height:.95; text-transform:uppercase; letter-spacing:-0.04em;
+    }
+    .label {
+      display:inline-block; background:var(--red); color:#fff; padding:10px 16px; border-radius:999px; font-size:13px; font-weight:700; margin-bottom:16px;
+    }
+    .sub { color:var(--muted); font-size:18px; line-height:1.55; max-width:700px; margin-bottom:18px; }
+    .hero-points { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .point { background:#fff; border-radius:18px; padding:16px; border:1px solid rgba(0,0,0,.05); font-weight:700; line-height:1.5; }
+    .hero-side { padding:26px; display:flex; flex-direction:column; gap:14px; }
+    .mini-stat { background:#fff; border-radius:20px; padding:18px; }
+    .mini-stat strong { display:block; font-size:32px; color:var(--red); margin-bottom:6px; }
+    .main {
+      display:grid; grid-template-columns: minmax(0, 1.15fr) minmax(360px, .85fr); gap:18px;
+    }
+    .calendar-shell { padding:18px; }
+    .calendar-toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+    .month-title { font-size:28px; font-weight:800; }
+    .filters { display:flex; gap:10px; flex-wrap:wrap; }
+    .chip {
+      padding:10px 14px; border-radius:999px; background:#fff; border:1px solid rgba(0,0,0,.06); font-weight:700; cursor:pointer;
+    }
+    .chip.active { background:var(--red); color:#fff; }
+    .weekdays, .calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; }
+    .weekdays { margin-bottom:10px; }
+    .weekday { text-align:center; color:var(--muted); font-size:13px; font-weight:700; padding:8px 0; }
+    .day {
+      min-height:145px; background:#fff; border:1px solid rgba(0,0,0,.05); border-radius:18px; padding:12px; display:flex; flex-direction:column; gap:10px; cursor:pointer;
+      transition:.18s ease;
+    }
+    .day:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+    .day.muted { opacity:.38; }
+    .day.selected { outline:2px solid var(--red); }
+    .day-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .day-num { font-weight:800; }
+    .add-mini { width:28px; height:28px; border-radius:10px; border:none; background:#ffe2df; color:var(--red); font-weight:800; cursor:pointer; }
+    .post-mini {
+      border-radius:12px; padding:10px; font-size:12px; line-height:1.4; background:#fff6f5; border:1px solid rgba(239,65,54,.14);
+    }
+    .post-mini strong { display:block; font-size:12px; margin-bottom:6px; }
+    .post-mini small { color:var(--muted); }
+    .side-shell { padding:18px; }
+    .side-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+    .side-head h2 { margin:0; font-size:28px; }
+    .stack { display:grid; gap:14px; }
+    .field, .panel { background:#fff; border-radius:18px; padding:16px; border:1px solid rgba(0,0,0,.05); }
+    .field label { display:block; font-size:13px; font-weight:700; color:var(--muted); margin-bottom:10px; text-transform:uppercase; }
+    .field input, .field select, .field textarea {
+      width:100%; border:1px solid rgba(0,0,0,.09); border-radius:14px; padding:14px 14px; font:inherit; background:#fff;
+    }
+    .field textarea { min-height:120px; resize:vertical; }
+    .inline { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .topic-row { display:flex; gap:10px; }
+    .topic-row input { flex:1; }
+    .generated {
+      background:linear-gradient(180deg,#fff 0%,#fff8f7 100%); border:1px solid rgba(239,65,54,.12);
+    }
+    .image-preview {
+      background:linear-gradient(135deg,#1f1f1f 0%,#2b2b2b 35%, var(--red) 100%); color:#fff; border-radius:18px; min-height:220px; padding:18px; position:relative; overflow:hidden;
+    }
+    .image-preview::before {
+      content:""; position:absolute; right:-40px; top:-30px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.10);
+      box-shadow:0 0 0 40px rgba(255,255,255,.06), 0 0 0 80px rgba(255,255,255,.04);
+    }
+    .image-preview .content { position:relative; z-index:1; }
+    .image-preview h3 { margin:0 0 8px; font-size:28px; text-transform:uppercase; line-height:1; }
+    .status-row { display:flex; gap:10px; flex-wrap:wrap; }
+    .status { padding:10px 12px; border-radius:999px; font-size:12px; font-weight:800; }
+    .status.draft { background:#f1f1f1; }
+    .status.gen { background:#ffe2df; color:var(--red); }
+    .status.done { background:#dff6e9; color:var(--green); }
+    .library { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px; }
+    .list-card { padding:18px; }
+    .list-card h3 { margin:0 0 10px; font-size:22px; }
+    .tag-list { display:flex; gap:8px; flex-wrap:wrap; }
+    .tag { background:#fff6f5; color:var(--red); border:1px solid rgba(239,65,54,.14); padding:10px 12px; border-radius:999px; font-size:13px; font-weight:700; }
+    .footer-note { margin-top:18px; color:var(--muted); font-size:14px; }
+    @media (max-width: 1100px) {
+      .hero, .main, .hero-points, .library, .inline { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <div class="brand">SMM <span>Planner MVP</span></div>
+      <div class="top-actions">
+        <button class="btn btn-secondary" type="button">Березень 2026</button>
+        <button class="btn btn-primary" type="button" id="quickAdd">+ Додати пост</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="label">MVP • контент-календар • AI генерація</div>
+        <h1>Календар для <span style="color:var(--red)">SMM-менеджера</span></h1>
+        <div class="sub">Перший робочий прототип: відкриваєш календар, тицяєш на дату, додаєш пост, обираєш тему, рубрику, плейсмент і формат — після цього генеруєш текст та візуал.</div>
+        <div class="hero-points">
+          <div class="point">Контент-план по датах в одному місці</div>
+          <div class="point">Готові теми або власна тема під пост</div>
+          <div class="point">Генерація тексту прямо в картці поста</div>
+          <div class="point">Генерація візуалу як наступний крок після тексту</div>
+        </div>
+      </div>
+      <div class="hero-card hero-side">
+        <div class="mini-stat"><strong>31</strong><span>день у контент-календарі</span></div>
+        <div class="mini-stat"><strong>6</strong><span>готових тем у бібліотеці MVP</span></div>
+        <div class="mini-stat"><strong>3</strong><span>статуси: чернетка / згенеровано / затверджено</span></div>
+      </div>
+    </section>
+
+    <section class="main">
+      <div class="calendar-shell">
+        <div class="calendar-toolbar">
+          <div class="month-title">Березень 2026</div>
+          <div class="filters" id="filters"></div>
+        </div>
+        <div class="weekdays">
+          <div class="weekday">Пн</div><div class="weekday">Вт</div><div class="weekday">Ср</div><div class="weekday">Чт</div><div class="weekday">Пт</div><div class="weekday">Сб</div><div class="weekday">Нд</div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+
+      <aside class="side-shell">
+        <div class="side-head">
+          <h2>Пост на <span id="selectedDateLabel">18 березня</span></h2>
+          <span class="status draft" id="statusBadge">Чернетка</span>
+        </div>
+
+        <div class="stack">
+          <div class="field">
+            <label>Дата</label>
+            <input id="postDate" type="text" value="2026-03-18" />
+          </div>
+
+          <div class="field">
+            <label>Тема</label>
+            <div class="topic-row">
+              <select id="topicPreset"></select>
+              <button class="btn btn-secondary" id="applyTopic" type="button">Взяти</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Або своя тема</label>
+            <input id="customTopic" type="text" placeholder="Напр. 5 помилок при запуску реклами" />
+          </div>
+
+          <div class="inline">
+            <div class="field">
+              <label>Рубрика</label>
+              <select id="rubric"></select>
+            </div>
+            <div class="field">
+              <label>Плейсмент</label>
+              <select id="placement"></select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Формат</label>
+            <select id="format"></select>
+          </div>
+
+          <div class="field generated">
+            <label>Згенерований текст</label>
+            <textarea id="generatedText" placeholder="Тут з’явиться текст поста"></textarea>
+            <div class="top-actions" style="margin-top:12px;">
+              <button class="btn btn-primary" id="generateText" type="button">Згенерувати текст</button>
+              <button class="btn btn-secondary" id="regenerateText" type="button">Перегенерувати</button>
+            </div>
+          </div>
+
+          <div class="field generated">
+            <label>Превʼю візуалу</label>
+            <div class="image-preview">
+              <div class="content">
+                <div class="label" style="margin-bottom:12px;">AI IMAGE PREVIEW</div>
+                <h3 id="imageTitle">Контент для Instagram</h3>
+                <p id="imageSubtitle" style="max-width:280px; line-height:1.6; color:rgba(255,255,255,.88); margin:0 0 12px;">Після вибору теми тут формується концепт картинки під пост.</p>
+                <div class="status-row">
+                  <span class="status" style="background:rgba(255,255,255,.18); color:#fff;">1080×1350</span>
+                  <span class="status" style="background:rgba(255,255,255,.18); color:#fff;" id="imagePlacement">Instagram Post</span>
+                </div>
+              </div>
+            </div>
+            <div class="top-actions" style="margin-top:12px;">
+              <button class="btn btn-primary" id="generateImage" type="button">Згенерувати фото</button>
+              <button class="btn btn-secondary" id="regenerateImage" type="button">Перегенерувати</button>
+            </div>
+          </div>
+
+          <div class="panel list-card">
+            <h3>Дії</h3>
+            <div class="top-actions">
+              <button class="btn btn-secondary" id="saveDraft" type="button">Зберегти чернетку</button>
+              <button class="btn btn-primary" id="approvePost" type="button">Затвердити</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="library">
+      <div class="panel list-card">
+        <h3>Рубрики</h3>
+        <div class="tag-list" id="rubricTags"></div>
+      </div>
+      <div class="panel list-card">
+        <h3>Плейсменти</h3>
+        <div class="tag-list" id="placementTags"></div>
+      </div>
+      <div class="panel list-card">
+        <h3>Формати</h3>
+        <div class="tag-list" id="formatTags"></div>
+      </div>
+      <div class="panel list-card">
+        <h3>Готові теми</h3>
+        <div class="tag-list" id="topicTags"></div>
+      </div>
+    </section>
+
+    <div class="footer-note">Це клікабельний MVP-прототип інтерфейсу. Наступний крок — підключити реальну БД, auth і AI API.</div>
+  </main>
+
+  <script>
+    const rubrics = ["Експертний", "Продаючий", "Кейс", "Лайфстайл", "Відгук"];
+    const placements = ["Instagram Post", "Instagram Story", "Facebook", "TikTok", "Telegram"];
+    const formats = ["Статичний пост", "Карусель", "Reels", "Story", "Текстовий пост"];
+    const topicPresets = [
+      "5 помилок, які вбивають охоплення",
+      "Як підготувати контент-план на місяць",
+      "Що постити, коли немає ідей",
+      "Кейс клієнта: до/після",
+      "Як оформити продаючий Reels",
+      "Чому рубрика важливіша за тренди"
+    ];
+
+    const posts = {
+      "2026-03-04": [{ topic: "Кейс клієнта: до/після", placement: "Instagram Post" }],
+      "2026-03-07": [{ topic: "Як підготувати контент-план на місяць", placement: "Telegram" }],
+      "2026-03-12": [{ topic: "Що постити, коли немає ідей", placement: "Instagram Story" }],
+      "2026-03-18": [{ topic: "5 помилок, які вбивають охоплення", placement: "Instagram Post" }],
+      "2026-03-21": [{ topic: "Чому рубрика важливіша за тренди", placement: "Facebook" }],
+      "2026-03-27": [{ topic: "Як оформити продаючий Reels", placement: "TikTok" }]
+    };
+
+    let selectedDate = "2026-03-18";
+    let currentStatus = "draft";
+    let activeFilter = "Всі";
+    const month = 2; // March 0-indexed
+    const year = 2026;
+
+    const monthNames = ["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
+    const calendarGrid = document.getElementById("calendarGrid");
+    const selectedDateLabel = document.getElementById("selectedDateLabel");
+    const postDate = document.getElementById("postDate");
+    const statusBadge = document.getElementById("statusBadge");
+    const topicPreset = document.getElementById("topicPreset");
+    const customTopic = document.getElementById("customTopic");
+    const rubric = document.getElementById("rubric");
+    const placement = document.getElementById("placement");
+    const format = document.getElementById("format");
+    const generatedText = document.getElementById("generatedText");
+    const imageTitle = document.getElementById("imageTitle");
+    const imageSubtitle = document.getElementById("imageSubtitle");
+    const imagePlacement = document.getElementById("imagePlacement");
+
+    function populateSelect(el, items) {
+      items.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item;
+        option.textContent = item;
+        el.appendChild(option);
+      });
+    }
+
+    function renderTags(containerId, items) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = items.map(item => `<span class="tag">${item}</span>`).join("");
+    }
+
+    function renderFilters() {
+      const list = ["Всі", ...placements];
+      const box = document.getElementById("filters");
+      box.innerHTML = list.map(item => `<button class="chip ${item === activeFilter ? 'active' : ''}" data-filter="${item}">${item}</button>`).join("");
+      box.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeFilter = btn.dataset.filter;
+          renderFilters();
+          renderCalendar();
+        });
+      });
+    }
+
+    function formatDateLabel(dateStr) {
+      const d = new Date(dateStr);
+      return `${d.getDate()} ${monthNames[d.getMonth()]}`;
+    }
+
+    function setStatus(status) {
+      currentStatus = status;
+      statusBadge.className = `status ${status === 'done' ? 'done' : status === 'gen' ? 'gen' : 'draft'}`;
+      statusBadge.textContent = status === 'done' ? 'Затверджено' : status === 'gen' ? 'Згенеровано' : 'Чернетка';
+    }
+
+    function selectDate(dateStr) {
+      selectedDate = dateStr;
+      selectedDateLabel.textContent = formatDateLabel(dateStr);
+      postDate.value = dateStr;
+      const post = (posts[dateStr] || [])[0];
+      if (post) {
+        customTopic.value = post.topic;
+        placement.value = post.placement;
+      } else {
+        customTopic.value = "";
+        placement.value = placements[0];
+      }
+      imagePlacement.textContent = placement.value;
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      calendarGrid.innerHTML = "";
+      const first = new Date(year, month, 1);
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const firstDay = (first.getDay() + 6) % 7;
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day muted";
+        calendarGrid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-03-${String(day).padStart(2, "0")}`;
+        const cell = document.createElement("div");
+        cell.className = `day ${dateStr === selectedDate ? 'selected' : ''}`;
+        const allPosts = posts[dateStr] || [];
+        const filtered = activeFilter === 'Всі' ? allPosts : allPosts.filter(p => p.placement === activeFilter);
+
+        cell.innerHTML = `
+          <div class="day-top">
+            <div class="day-num">${day}</div>
+            <button class="add-mini" data-date="${dateStr}">+</button>
+          </div>
+          <div style="display:grid; gap:8px;">
+            ${filtered.slice(0,2).map(post => `
+              <div class="post-mini">
+                <strong>${post.topic}</strong>
+                <small>${post.placement}</small>
+              </div>
+            `).join("")}
+          </div>
+        `;
+
+        cell.addEventListener("click", (e) => {
+          if (e.target.classList.contains("add-mini")) return;
+          selectDate(dateStr);
+        });
+
+        calendarGrid.appendChild(cell);
+      }
+
+      document.querySelectorAll(".add-mini").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          selectDate(btn.dataset.date);
+          customTopic.focus();
+        });
+      });
+    }
+
+    function buildText() {
+      const topic = customTopic.value || topicPreset.value;
+      const rubricValue = rubric.value;
+      const placementValue = placement.value;
+      const formatValue = format.value;
+      generatedText.value = `Тема: ${topic}\n\nГачок: Починаєш вести ${placementValue}, але відчуваєш хаос у контенті?\n\nОсновна думка: У ${rubricValue.toLowerCase()} контенті важливо не просто постити, а будувати логіку: тема → формат → плейсмент → дія.\n\nЩо робимо:\n1. Беремо одну сильну тему\n2. Підбираємо формат ${formatValue.toLowerCase()}\n3. Адаптуємо під ${placementValue}\n4. Даємо чіткий CTA\n\nCTA: Якщо хочеш, можу під це зібрати тобі готовий контент-план 👌`;
+      setStatus('gen');
+    }
+
+    function buildImage() {
+      const topic = customTopic.value || topicPreset.value;
+      imageTitle.textContent = topic.length > 32 ? topic.slice(0, 32) + '…' : topic;
+      imageSubtitle.textContent = `Візуал під ${placement.value} у форматі “${format.value}” з акцентом на рубрику “${rubric.value}”.`;
+      imagePlacement.textContent = placement.value;
+      setStatus('gen');
+    }
+
+    populateSelect(topicPreset, topicPresets);
+    populateSelect(rubric, rubrics);
+    populateSelect(placement, placements);
+    populateSelect(format, formats);
+    renderTags("rubricTags", rubrics);
+    renderTags("placementTags", placements);
+    renderTags("formatTags", formats);
+    renderTags("topicTags", topicPresets);
+    renderFilters();
+    renderCalendar();
+    selectDate(selectedDate);
+
+    document.getElementById("applyTopic").addEventListener("click", () => {
+      customTopic.value = topicPreset.value;
+    });
+    document.getElementById("generateText").addEventListener("click", buildText);
+    document.getElementById("regenerateText").addEventListener("click", buildText);
+    document.getElementById("generateImage").addEventListener("click", buildImage);
+    document.getElementById("regenerateImage").addEventListener("click", buildImage);
+    document.getElementById("saveDraft").addEventListener("click", () => setStatus('draft'));
+    document.getElementById("approvePost").addEventListener("click", () => setStatus('done'));
+    document.getElementById("quickAdd").addEventListener("click", () => {
+      customTopic.focus();
+      customTopic.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    placement.addEventListener("change", () => imagePlacement.textContent = placement.value);
+  </script>
+</body>
+</html>
