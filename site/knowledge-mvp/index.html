@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aima Knowledge Base MVP</title>
+  <link rel="stylesheet" href="../smm-mvp-aima/styles.css" />
+  <style>
+    .kb-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;height:calc(100vh - 86px)}
+    .kb-left,.kb-right{display:grid;gap:12px;min-height:0}
+    .kb-list{display:grid;gap:8px;overflow:auto}
+    .kb-item{border:1px solid #e8edf5;border-radius:18px;padding:12px;background:#fff}
+    .kb-item strong{display:block;margin-bottom:6px;font-size:15px}
+    .kb-item p{margin:0;color:#667085;font-size:13px;line-height:1.4}
+    .kb-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .kb-badge{padding:6px 10px;border-radius:999px;background:#f3f6fb;font-size:11px;font-weight:700;color:#475467}
+    .hero-note{padding:14px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff}
+    .hero-note h3{margin:0 0 8px;font-size:22px}
+    .hero-note p{margin:0;color:rgba(255,255,255,.88);line-height:1.45}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .timeline{display:grid;gap:8px}
+    .timeline .setting-row{align-items:flex-start}
+    .search-row{display:grid;grid-template-columns:1fr auto auto;gap:8px}
+    .field textarea.long{min-height:140px}
+    @media (max-width: 1200px){.kb-layout,.split,.search-row{grid-template-columns:1fr;height:auto}}
+  </style>
+</head>
+<body>
+  <div class="app compact">
+    <aside class="sidebar">
+      <div class="logo"><div class="logo-badge">A</div><div><strong>Adminpanel</strong><small>Версія 1.0.0</small></div></div>
+      <div class="sidebar-title">Навігація</div>
+      <div class="sidebar-menu">
+        <button class="side-link active">База знань</button>
+        <button class="side-link">Статті</button>
+        <button class="side-link">Наради</button>
+        <button class="side-link">Чернетки з нарад</button>
+        <button class="side-link">Категорії</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>База знань</h1>
+          <p>Aima • MVP для накопичення знань про продукт</p>
+        </div>
+      </header>
+
+      <section class="kb-layout">
+        <div class="kb-left">
+          <div class="card hero-note">
+            <h3>Одна система знань про продукт 👌</h3>
+            <p>Команда додає знання вручну, а система окремо забирає інсайти з нарад і пропонує оновити або створити нову статтю.</p>
+          </div>
+
+          <div class="card" style="min-height:0; display:grid; gap:12px;">
+            <div class="card-head slim">
+              <h2>Статті бази знань</h2>
+            </div>
+            <div class="search-row">
+              <input type="text" placeholder="Пошук по статтях, фічах, інструкціях" />
+              <button class="btn btn-secondary">Фільтр</button>
+              <button class="btn btn-primary">Нова стаття</button>
+            </div>
+            <div class="kb-list">
+              <div class="kb-item">
+                <strong>Як створити новий проєкт у додатку</strong>
+                <p>Покрокова інструкція для нового користувача: старт, налаштування, перший сценарій використання.</p>
+                <div class="kb-meta"><span class="kb-badge">Онбординг</span><span class="kb-badge">Інструкція</span><span class="kb-badge">Оновлено сьогодні</span></div>
+              </div>
+              <div class="kb-item">
+                <strong>Логіка ролей і доступів</strong>
+                <p>Що бачить адміністратор, менеджер і редактор. Які обмеження і що можна делегувати.</p>
+                <div class="kb-meta"><span class="kb-badge">Права доступу</span><span class="kb-badge">FAQ</span></div>
+              </div>
+              <div class="kb-item">
+                <strong>Типові причини, чому користувач не завершує сценарій</strong>
+                <p>Добірка з болів, поведінки та пояснень з інтерв’ю й підтримки.</p>
+                <div class="kb-meta"><span class="kb-badge">Поведінка користувача</span><span class="kb-badge">Аналітика</span></div>
+              </div>
+              <div class="kb-item">
+                <strong>Інтеграція з Telegram</strong>
+                <p>Які обмеження є, як підключається канал, які дії система виконує після авторизації.</p>
+                <div class="kb-meta"><span class="kb-badge">Інтеграції</span><span class="kb-badge">Telegram</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kb-right">
+          <div class="split">
+            <div class="card">
+              <div class="card-head slim"><h2>Нова стаття</h2></div>
+              <div class="stack">
+                <div class="field"><label>Назва</label><input type="text" placeholder="Назва статті" /></div>
+                <div class="field"><label>Категорія</label><select><option>Онбординг</option><option>Функції</option><option>Інтеграції</option><option>FAQ</option></select></div>
+                <div class="field"><label>Теги</label><input type="text" placeholder="telegram, старт, ролі" /></div>
+                <div class="field"><label>Короткий опис</label><textarea></textarea></div>
+                <button class="btn btn-primary">Зберегти статтю</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head slim"><h2>З наради в знання</h2></div>
+              <div class="stack">
+                <div class="field"><label>Нарада</label><select><option>Нарада по онбордингу</option><option>Зідзвон по Telegram</option></select></div>
+                <div class="field"><label>Витягнутий інсайт</label><textarea class="long">Користувачі не розуміють, чим відрізняється тестовий режим від активного. Потрібно окреме пояснення в базі знань.</textarea></div>
+                <div class="top-actions">
+                  <button class="btn btn-secondary">Оновити існуючу</button>
+                  <button class="btn btn-primary">Створити нову</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="min-height:0; display:grid; gap:10px;">
+            <div class="card-head slim"><h2>Чернетки з нарад</h2></div>
+            <div class="timeline">
+              <div class="setting-row"><span><strong>Новий інсайт по онбордингу</strong><br><small>З наради витягнуто: люди губляться на 2-му кроці підключення</small></span><div class="row-actions"><button class="mini-btn">В статтю</button></div></div>
+              <div class="setting-row"><span><strong>FAQ по Telegram інтеграції</strong><br><small>Потрібна окрема стаття про права адміністратора та підключення каналу</small></span><div class="row-actions"><button class="mini-btn">Створити</button></div></div>
+              <div class="setting-row"><span><strong>Оновити сценарій “перший запуск”</strong><br><small>На нараді узгодили нову логіку після реєстрації</small></span><div class="row-actions"><button class="mini-btn">Оновити</button></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
