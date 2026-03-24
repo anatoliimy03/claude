@@ -2,7 +2,6 @@ const state = {
   currentDate: new Date(2026, 2, 24),
   selectedDate: '2026-03-24',
   activeFilter: 'all',
-  currentView: 'calendar',
   rubrics: ['Експертний', 'Продаючий', 'Кейс', 'Лайфстайл', 'Відгук'],
   placements: ['Instagram Post', 'Instagram Story', 'Facebook', 'TikTok', 'Telegram'],
   formats: ['Статичний пост', 'Карусель', 'Reels', 'Story', 'Текстовий пост'],
@@ -13,6 +12,9 @@ const state = {
     'Кейс клієнта: до/після',
     'Як оформити продаючий Reels',
     'Чому рубрика важливіша за тренди'
+  ],
+  meetings: [
+    { title: 'План контенту на квітень', date: '2026-03-20', notes: 'Акцент на прогрів до запуску. Потрібні кейси, behind the scenes, серія корисних постів і контент про біль клієнта.' }
   ],
   holidays: {
     '2026-01-01': 'Новий рік — підбірка підсумків, плани, акції.',
@@ -51,6 +53,8 @@ function humanDate(str){ const d=new Date(str); return `${d.getDate()} ${monthNa
 function statusLabel(status){ return status==='done' ? 'Затверджено' : status==='gen' ? 'Згенеровано' : 'Чернетка'; }
 function getHolidayHint(dateStr){ return state.holidays[dateStr] || 'Немає рекомендації'; }
 function countHolidayMatches(year, month){ return Object.keys(state.holidays).filter(k=>{ const d=new Date(k); return d.getFullYear()===year && d.getMonth()===month; }).length; }
+function countAllPosts(){ return Object.values(state.posts).reduce((acc, arr)=>acc + arr.length, 0); }
+function countDrafts(){ return Object.values(state.posts).flat().filter(p=>p.status==='draft').length; }
 
 function saveState(){ localStorage.setItem('aima-smm-mvp', JSON.stringify(state)); }
 function loadState(){
@@ -67,12 +71,17 @@ function navigate(page){
   if (page === 'calendar') window.location.href = './index.html';
   if (page === 'settings') window.location.href = './settings.html';
   if (page === 'topics') window.location.href = './topics.html';
+  if (page === 'meetings') window.location.href = './meetings.html';
 }
 
 function bindNav(){
-  document.querySelectorAll('[data-nav]').forEach(btn => {
-    btn.addEventListener('click', () => navigate(btn.dataset.nav));
-  });
+  document.querySelectorAll('[data-nav]').forEach(btn => btn.addEventListener('click', () => navigate(btn.dataset.nav)));
+}
+
+function enableEnterSubmit(formId, handler){
+  const form = document.getElementById(formId);
+  if(!form) return;
+  form.addEventListener('submit', (e)=>{ e.preventDefault(); handler(); });
 }
 
 function renderSidebar(active){
@@ -81,6 +90,7 @@ function renderSidebar(active){
   const items = [
     ['calendar','Контент-календар'],
     ['topics','Теми'],
+    ['meetings','Наради'],
     ['settings','Рубрики / плейсменти / формати']
   ];
   menu.innerHTML = items.map(([key,label]) => `<button class="side-link ${active===key?'active':''}" data-nav="${key}">${label}</button>`).join('');
@@ -94,8 +104,74 @@ function renderHeader(title, subtitle='Aima SMM Planner'){
   if(subNode) subNode.textContent = subtitle;
 }
 
-function countAllPosts(){ return Object.values(state.posts).reduce((acc, arr)=>acc + arr.length, 0); }
-function countDrafts(){ return Object.values(state.posts).flat().filter(p=>p.status==='draft').length; }
+function fillSelect(id, items){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = items.map(item=>`<option value="${item}">${item}</option>`).join('');
+}
+
+function bindCollection(key, listId, inputId, addId, afterRender = ()=>{}, renderer){
+  const render = ()=>{
+    const list = document.getElementById(listId);
+    if(!list) return;
+    list.innerHTML = (renderer ? renderer(state[key]) : state[key].map((item, idx) => `
+      <div class="setting-row">
+        <span>${item}</span>
+        <div class="row-actions">
+          <button class="mini-btn" data-edit="${idx}">Редагувати</button>
+          <button class="mini-btn danger" data-remove="${idx}">Видалити</button>
+        </div>
+      </div>`).join(''));
+    list.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click', ()=>{ state[key].splice(Number(btn.dataset.remove),1); saveState(); render(); afterRender(); }));
+    list.querySelectorAll('[data-edit]').forEach(btn=>btn.addEventListener('click', ()=>{
+      const idx = Number(btn.dataset.edit);
+      const current = state[key][idx];
+      const next = prompt('Нове значення', typeof current === 'string' ? current : current.title || current.name || '');
+      if(next){
+        if(typeof current === 'string') state[key][idx] = next;
+        else if(current.title) state[key][idx].title = next;
+        else if(current.name) state[key][idx].name = next;
+        saveState(); render(); afterRender();
+      }
+    }));
+  };
+  const add = ()=>{
+    const input = document.getElementById(inputId);
+    const value = input?.value.trim();
+    if(!value) return;
+    state[key].push(value);
+    input.value='';
+    saveState(); render(); afterRender();
+  };
+  const btn = document.getElementById(addId);
+  if(btn && !btn.dataset.boundClick){ btn.dataset.boundClick='1'; btn.addEventListener('click', (e)=>{ if(btn.type!=='submit') { e.preventDefault(); add(); } }); }
+  enableEnterSubmit(btn?.form?.id, add);
+  render();
+}
+
+function applyPlacementSize(placement){
+  const box = document.getElementById('previewBox');
+  const size = placementSizes[placement] || '1080×1350';
+  if(document.getElementById('visualSize')) document.getElementById('visualSize').textContent = `Рекомендований розмір: ${size}`;
+  if(box) box.style.aspectRatio = placement.includes('Story') || placement === 'TikTok' ? '9 / 16' : placement === 'Telegram' ? '1 / 1' : '4 / 5';
+}
+
+function generateTopicsFromMeetings(){
+  const ideas = [];
+  state.meetings.forEach(meeting => {
+    const text = `${meeting.title} ${meeting.notes}`.toLowerCase();
+    if(text.includes('кейс')) ideas.push('Кейс: як ми отримали результат для клієнта');
+    if(text.includes('прогрів')) ideas.push('Серія прогрівочних постів перед запуском');
+    if(text.includes('біль')) ideas.push('3 болі клієнта, які заважають купити зараз');
+    if(text.includes('вебінар')) ideas.push('Як підготувати аудиторію до вебінару через контент');
+    if(text.includes('курс')) ideas.push('Що реально дає курс і кому він підходить');
+    if(text.includes('акці')) ideas.push('Як подати акційну пропозицію без дешевого вигляду');
+    if(text.includes('закуліс')) ideas.push('Закулісся процесу: як ми готуємо продукт / послугу');
+    if(text.includes('контент')) ideas.push('Контент-план на тиждень: що постити по днях');
+  });
+  const unique = [...new Set(ideas)].filter(Boolean);
+  return unique.length ? unique : ['Розбір запиту клієнта: що стоїть за покупкою', 'Як вибудувати контент, який веде до заявки', 'Поширені помилки у комунікації бренду'];
+}
 
 function renderCalendarPage(){
   renderSidebar('calendar');
@@ -108,6 +184,43 @@ function renderCalendarPage(){
   const currentMonthEl = document.getElementById('currentMonth');
   const weekdays = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
   document.getElementById('weekdays').innerHTML = weekdays.map(d=>`<div class="weekday">${d}</div>`).join('');
+
+  function currentDraft(){
+    const prev = (state.posts[state.selectedDate]||[])[0] || {};
+    return {
+      topic: document.getElementById('customTopic').value || document.getElementById('topicPreset').value,
+      rubric: document.getElementById('rubricSelect').value,
+      placement: document.getElementById('placementSelect').value,
+      format: document.getElementById('formatSelect').value,
+      text: document.getElementById('generatedText').value,
+      image: prev.image || null,
+      status: 'draft'
+    };
+  }
+
+  function fillEditor(){
+    const post = (state.posts[state.selectedDate]||[])[0] || { topic:'', placement: state.placements[0], rubric: state.rubrics[0], format: state.formats[0], status:'draft', image:null };
+    document.getElementById('selectedDate').textContent = humanDate(state.selectedDate);
+    document.getElementById('postDate').value = state.selectedDate;
+    document.getElementById('holidayHint').textContent = getHolidayHint(state.selectedDate);
+    fillSelect('topicPreset', state.topics);
+    document.getElementById('customTopic').value = post.topic || '';
+    fillSelect('rubricSelect', state.rubrics);
+    fillSelect('placementSelect', state.placements);
+    fillSelect('formatSelect', state.formats);
+    document.getElementById('rubricSelect').value = post.rubric || state.rubrics[0];
+    document.getElementById('placementSelect').value = post.placement || state.placements[0];
+    document.getElementById('formatSelect').value = post.format || state.formats[0];
+    document.getElementById('generatedText').value = post.text || '';
+    document.getElementById('imageTitle').textContent = post.topic || 'Новий контент';
+    document.getElementById('imageDesc').textContent = `Плейсмент: ${post.placement || state.placements[0]} • Формат: ${post.format || state.formats[0]}`;
+    const badge = document.getElementById('statusBadge');
+    badge.className = `status-badge ${post.status || 'draft'}`;
+    badge.textContent = statusLabel(post.status || 'draft');
+    applyPlacementSize(post.placement || state.placements[0]);
+    const img = document.getElementById('uploadedPreview');
+    if(post.image){ img.src = post.image; img.classList.remove('hidden'); } else { img.src=''; img.classList.add('hidden'); }
+  }
 
   function drawFilters(){
     const filterEl = document.getElementById('filters');
@@ -133,73 +246,11 @@ function renderCalendarPage(){
       const posts = state.posts[key] || [];
       const filtered = state.activeFilter==='all' ? posts : posts.filter(p=>p.placement===state.activeFilter);
       const selected = key===state.selectedDate ? 'selected' : '';
-      const holiday = state.holidays[key] ? `<div class="post-pill gen"><strong>🎉 Рекомендація</strong><span>${state.holidays[key].slice(0,40)}...</span></div>` : '';
-      grid.innerHTML += `
-        <div class="day ${selected}" data-date="${key}">
-          <div class="day-head"><span class="day-num">${day}</span><button class="icon-btn add-post" data-date="${key}">+</button></div>
-          <div class="day-posts">${holiday}
-            ${filtered.slice(0,2).map(post=>`<div class="post-pill ${post.status||'draft'}"><strong>${post.topic}</strong><span>${post.placement}</span></div>`).join('')}
-          </div>
-        </div>`;
+      const holiday = state.holidays[key] ? `<div class="post-pill gen"><strong>🎉 Рекомендація</strong><span>${state.holidays[key].slice(0,36)}...</span></div>` : '';
+      grid.innerHTML += `<div class="day ${selected}" data-date="${key}"><div class="day-head"><span class="day-num">${day}</span><button class="icon-btn add-post" data-date="${key}" type="button">+</button></div><div class="day-posts">${holiday}${filtered.slice(0,2).map(post=>`<div class="post-pill ${post.status||'draft'}"><strong>${post.topic}</strong><span>${post.placement}</span></div>`).join('')}</div></div>`;
     }
-    grid.querySelectorAll('.day[data-date]').forEach(el=>el.addEventListener('click', (e)=>{
-      if(e.target.classList.contains('add-post')) return;
-      state.selectedDate = el.dataset.date; saveState(); drawCalendar(); fillEditor();
-    }));
-    grid.querySelectorAll('.add-post').forEach(btn=>btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      state.selectedDate = btn.dataset.date; saveState(); fillEditor(); drawCalendar();
-      document.getElementById('customTopic').focus();
-    }));
-  }
-
-  function fillSelect(id, items){
-    const el = document.getElementById(id);
-    el.innerHTML = items.map(item=>`<option value="${item}">${item}</option>`).join('');
-  }
-
-  function applyPlacementSize(placement){
-    const box = document.getElementById('previewBox');
-    const size = placementSizes[placement] || '1080×1350';
-    document.getElementById('visualSize').textContent = `Рекомендований розмір: ${size}`;
-    box.style.aspectRatio = placement.includes('Story') || placement === 'TikTok' ? '9 / 16' : placement === 'Telegram' ? '1 / 1' : '4 / 5';
-  }
-
-  function fillEditor(){
-    const post = (state.posts[state.selectedDate]||[])[0] || { topic:'', placement: state.placements[0], rubric: state.rubrics[0], format: state.formats[0], status:'draft', image:null };
-    document.getElementById('selectedDate').textContent = humanDate(state.selectedDate);
-    document.getElementById('postDate').value = state.selectedDate;
-    document.getElementById('holidayHint').textContent = getHolidayHint(state.selectedDate);
-    document.getElementById('topicPreset').innerHTML = state.topics.map(t=>`<option value="${t}">${t}</option>`).join('');
-    document.getElementById('customTopic').value = post.topic || '';
-    fillSelect('rubricSelect', state.rubrics);
-    fillSelect('placementSelect', state.placements);
-    fillSelect('formatSelect', state.formats);
-    document.getElementById('rubricSelect').value = post.rubric || state.rubrics[0];
-    document.getElementById('placementSelect').value = post.placement || state.placements[0];
-    document.getElementById('formatSelect').value = post.format || state.formats[0];
-    document.getElementById('generatedText').value = post.text || '';
-    document.getElementById('imageTitle').textContent = post.topic || 'Новий контент';
-    document.getElementById('imageDesc').textContent = `Плейсмент: ${post.placement || state.placements[0]} • Формат: ${post.format || state.formats[0]}`;
-    const badge = document.getElementById('statusBadge');
-    badge.className = `status-badge ${post.status || 'draft'}`;
-    badge.textContent = statusLabel(post.status || 'draft');
-    applyPlacementSize(post.placement || state.placements[0]);
-    const img = document.getElementById('uploadedPreview');
-    if(post.image){ img.src = post.image; img.classList.remove('hidden'); } else { img.src=''; img.classList.add('hidden'); }
-  }
-
-  function currentDraft(){
-    const prev = (state.posts[state.selectedDate]||[])[0] || {};
-    return {
-      topic: document.getElementById('customTopic').value || document.getElementById('topicPreset').value,
-      rubric: document.getElementById('rubricSelect').value,
-      placement: document.getElementById('placementSelect').value,
-      format: document.getElementById('formatSelect').value,
-      text: document.getElementById('generatedText').value,
-      image: prev.image || null,
-      status: 'draft'
-    };
+    grid.querySelectorAll('.day[data-date]').forEach(el=>el.addEventListener('click', (e)=>{ if(e.target.classList.contains('add-post')) return; state.selectedDate = el.dataset.date; saveState(); drawCalendar(); fillEditor(); }));
+    grid.querySelectorAll('.add-post').forEach(btn=>btn.addEventListener('click', (e)=>{ e.stopPropagation(); state.selectedDate = btn.dataset.date; saveState(); fillEditor(); drawCalendar(); document.getElementById('customTopic').focus(); }));
   }
 
   function savePost(status='draft'){
@@ -225,7 +276,8 @@ function renderCalendarPage(){
     const format = document.getElementById('formatSelect').value;
     const holiday = getHolidayHint(state.selectedDate);
     const size = placementSizes[placement] || '1080×1350';
-    document.getElementById('generatedText').value = `Дата публікації: ${humanDate(state.selectedDate)}\nТема: ${topic}\nРубрика: ${rubric}\nПлейсмент: ${placement}\nФормат: ${format}\nРекомендований візуал: ${size}\nСвятковий контекст: ${holiday}\n\nГачок: ${topic} — саме той контент, який може зачепити аудиторію у ${placement}.\n\nОсновна думка: У рубриці “${rubric}” важливо не просто постити, а подати тему в форматі “${format}”, адаптованому саме під цей плейсмент.\n\nЩо має бути всередині:\n1. Яскравий перший рядок\n2. Користь або сенс\n3. Приклад / кейс / пояснення\n4. Завершення з CTA\n\nCTA: Якщо хочеш, можу під цю тему зібрати серію контенту на кілька днів.`;
+    const meetingsContext = state.meetings.slice(-3).map(m=>`${m.title}: ${m.notes}`).join(' | ');
+    document.getElementById('generatedText').value = `Дата публікації: ${humanDate(state.selectedDate)}\nТема: ${topic}\nРубрика: ${rubric}\nПлейсмент: ${placement}\nФормат: ${format}\nРекомендований візуал: ${size}\nСвятковий контекст: ${holiday}\nКонтекст із нарад: ${meetingsContext || 'немає'}\n\nГачок: ${topic} — тема, яка має зачепити аудиторію саме в ${placement}.\n\nОсновна думка: У рубриці “${rubric}” важливо подати сенс через формат “${format}”, враховуючи контекст бізнесу й останні наради.\n\nСтруктура:\n1. Хук\n2. Основна користь\n3. Приклад / кейс / пояснення\n4. CTA\n\nCTA: Якщо хочеш, можу під цю тему зібрати серію контенту на кілька днів.`;
     const post = currentDraft(); post.text = document.getElementById('generatedText').value; post.status = 'gen'; state.posts[state.selectedDate]=[post]; saveState(); fillEditor(); drawCalendar();
   });
   document.getElementById('generateImage').addEventListener('click', ()=>{
@@ -249,39 +301,13 @@ function renderCalendarPage(){
     };
     reader.readAsDataURL(file);
   });
-  document.getElementById('saveDraft').addEventListener('click', ()=>savePost('draft'));
+  enableEnterSubmit('postForm', ()=>savePost('draft'));
   document.getElementById('approvePost').addEventListener('click', ()=>savePost('done'));
   document.getElementById('goSettings').addEventListener('click', ()=>navigate('settings'));
 
   drawFilters();
   drawCalendar();
   fillEditor();
-}
-
-function bindCollection(key, listId, inputId, addId, afterRender = ()=>{}){
-  const render = ()=>{
-    const list = document.getElementById(listId);
-    list.innerHTML = state[key].map((item, idx) => `
-      <div class="setting-row">
-        <span>${item}</span>
-        <div class="row-actions">
-          <button class="mini-btn" data-edit="${idx}">Редагувати</button>
-          <button class="mini-btn danger" data-remove="${idx}">Видалити</button>
-        </div>
-      </div>`).join('');
-    list.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click', ()=>{ state[key].splice(Number(btn.dataset.remove),1); saveState(); render(); afterRender(); }));
-    list.querySelectorAll('[data-edit]').forEach(btn=>btn.addEventListener('click', ()=>{
-      const idx = Number(btn.dataset.edit); const next = prompt('Нове значення', state[key][idx]);
-      if(next){ state[key][idx]=next; saveState(); render(); afterRender(); }
-    }));
-  };
-  document.getElementById(addId).addEventListener('click', ()=>{
-    const input = document.getElementById(inputId);
-    const value = input.value.trim();
-    if(!value) return;
-    state[key].push(value); input.value=''; saveState(); render(); afterRender();
-  });
-  render();
 }
 
 function renderSettingsPage(){
@@ -299,6 +325,9 @@ function renderSettingsPage(){
   bindCollection('rubrics','rubricsList','rubricInput','addRubric',syncAllCards);
   bindCollection('placements','placementsList','placementInput','addPlacement',syncAllCards);
   bindCollection('formats','formatsList','formatInput','addFormat',syncAllCards);
+  enableEnterSubmit('rubricForm', ()=>document.getElementById('addRubric').click());
+  enableEnterSubmit('placementForm', ()=>document.getElementById('addPlacement').click());
+  enableEnterSubmit('formatForm', ()=>document.getElementById('addFormat').click());
   bindNav();
 }
 
@@ -309,12 +338,57 @@ function renderTopicsPage(){
     const stats = document.getElementById('topicsStats');
     stats.innerHTML = `
       <div class="stat-card"><strong>${state.topics.length}</strong><span>Тем</span></div>
+      <div class="stat-card"><strong>${state.meetings.length}</strong><span>Нарад у базі</span></div>
       <div class="stat-card"><strong>${state.topics.filter(t=>t.length>20).length}</strong><span>Розгорнутих тем</span></div>
-      <div class="stat-card"><strong>${state.topics.filter(t=>t.length<=20).length}</strong><span>Коротких тем</span></div>
       <div class="stat-card"><strong>${countAllPosts()}</strong><span>Постів у календарі</span></div>`;
-    }
+    const preview = document.getElementById('generatedTopicsPreview');
+    if(preview) preview.innerHTML = '';
+  }
   sync();
   bindCollection('topics','topicsList','topicInput','addTopic',sync);
+  enableEnterSubmit('topicForm', ()=>document.getElementById('addTopic').click());
+  document.getElementById('generateTopicsFromMeetings').addEventListener('click', ()=>{
+    const generated = generateTopicsFromMeetings();
+    const preview = document.getElementById('generatedTopicsPreview');
+    preview.innerHTML = generated.map((topic, idx)=>`<div class="generated-preview-item"><strong>${topic}</strong><div class="top-actions"><button class="btn btn-secondary" type="button" data-push-topic="${idx}">Додати в теми</button></div></div>`).join('');
+    preview.querySelectorAll('[data-push-topic]').forEach(btn=>btn.addEventListener('click', ()=>{
+      const topic = generated[Number(btn.dataset.pushTopic)];
+      if(!state.topics.includes(topic)) state.topics.unshift(topic);
+      saveState();
+      renderTopicsPage();
+    }));
+  });
+}
+
+function renderMeetingsPage(){
+  renderSidebar('meetings');
+  renderHeader('Наради', 'Aima • джерело контексту для генерації тем');
+  const stats = document.getElementById('meetingsStats');
+  stats.innerHTML = `
+    <div class="stat-card"><strong>${state.meetings.length}</strong><span>Нарад</span></div>
+    <div class="stat-card"><strong>${state.topics.length}</strong><span>Поточних тем</span></div>
+    <div class="stat-card"><strong>${generateTopicsFromMeetings().length}</strong><span>Можливих нових тем</span></div>
+    <div class="stat-card"><strong>${countAllPosts()}</strong><span>Постів у календарі</span></div>`;
+
+  function renderMeetings(){
+    const list = document.getElementById('meetingsList');
+    list.innerHTML = state.meetings.map((item, idx)=>`<div class="setting-row"><span><strong>${item.title}</strong><br><small>${item.date} — ${item.notes}</small></span><div class="row-actions"><button class="mini-btn danger" data-remove-meeting="${idx}">Видалити</button></div></div>`).join('');
+    list.querySelectorAll('[data-remove-meeting]').forEach(btn=>btn.addEventListener('click', ()=>{ state.meetings.splice(Number(btn.dataset.removeMeeting),1); saveState(); renderMeetingsPage(); }));
+  }
+  renderMeetings();
+
+  enableEnterSubmit('meetingForm', ()=>{
+    const title = document.getElementById('meetingTitle').value.trim();
+    const date = document.getElementById('meetingDate').value || new Date().toISOString().slice(0,10);
+    const notes = document.getElementById('meetingNotes').value.trim();
+    if(!title || !notes) return;
+    state.meetings.unshift({ title, date, notes });
+    saveState();
+    document.getElementById('meetingTitle').value='';
+    document.getElementById('meetingDate').value='';
+    document.getElementById('meetingNotes').value='';
+    renderMeetingsPage();
+  });
 }
 
 window.addEventListener('DOMContentLoaded', ()=>{
@@ -323,4 +397,5 @@ window.addEventListener('DOMContentLoaded', ()=>{
   if(page==='calendar') renderCalendarPage();
   if(page==='settings') renderSettingsPage();
   if(page==='topics') renderTopicsPage();
+  if(page==='meetings') renderMeetingsPage();
 });
