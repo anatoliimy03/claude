@@ -4,31 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aima Knowledge Base MVP</title>
-  <link rel="stylesheet" href="../smm-mvp-aima/styles.css" />
+  <link rel="stylesheet" href="../smm-mvp-aima/styles.css?v=kb1" />
   <style>
     .kb-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;height:calc(100vh - 86px)}
     .kb-left,.kb-right{display:grid;gap:12px;min-height:0}
-    .kb-list{display:grid;gap:8px;overflow:auto}
-    .kb-item{border:1px solid #e8edf5;border-radius:18px;padding:12px;background:#fff}
+    .kb-list,.timeline{display:grid;gap:8px;overflow:auto}
+    .kb-item{border:1px solid #e8edf5;border-radius:18px;padding:12px;background:#fff;cursor:pointer}
+    .kb-item.active{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
     .kb-item strong{display:block;margin-bottom:6px;font-size:15px}
     .kb-item p{margin:0;color:#667085;font-size:13px;line-height:1.4}
-    .kb-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-    .kb-badge{padding:6px 10px;border-radius:999px;background:#f3f6fb;font-size:11px;font-weight:700;color:#475467}
-    .hero-note{padding:14px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff}
-    .hero-note h3{margin:0 0 8px;font-size:22px}
-    .hero-note p{margin:0;color:rgba(255,255,255,.88);line-height:1.45}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .timeline{display:grid;gap:8px}
-    .timeline .setting-row{align-items:flex-start}
-    .search-row{display:grid;grid-template-columns:1fr auto auto;gap:8px}
-    .field textarea.long{min-height:140px}
-    @media (max-width: 1200px){.kb-layout,.split,.search-row{grid-template-columns:1fr;height:auto}}
+    .kb-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.kb-badge{padding:6px 10px;border-radius:999px;background:#f3f6fb;font-size:11px;font-weight:700;color:#475467}
+    .hero-note{padding:14px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff}.hero-note h3{margin:0 0 8px;font-size:22px}.hero-note p{margin:0;color:rgba(255,255,255,.88);line-height:1.45}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}.search-row{display:grid;grid-template-columns:1fr auto auto;gap:8px}.field textarea.long{min-height:140px}.detail-box{border:1px solid #e8edf5;border-radius:18px;padding:12px;background:#f8fafc}.detail-box h3{margin:0 0 8px}.muted{color:#667085;font-size:13px;line-height:1.5}.insight{padding:10px 12px;border:1px solid #dbeafe;background:#eff6ff;border-radius:16px}.insight strong{display:block;margin-bottom:6px}.tabs-note{font-size:12px;color:#667085}.hidden{display:none}@media (max-width:1200px){.kb-layout,.split,.search-row{grid-template-columns:1fr;height:auto}}
   </style>
 </head>
 <body>
   <div class="app compact">
     <aside class="sidebar">
-      <div class="logo"><div class="logo-badge">A</div><div><strong>Adminpanel</strong><small>Версія 1.0.0</small></div></div>
+      <div class="logo"><div class="logo-badge">A</div><div><strong>Adminpanel</strong><small>Версія 1.0.1</small></div></div>
       <div class="sidebar-title">Навігація</div>
       <div class="sidebar-menu">
         <button class="side-link active">База знань</button>
@@ -54,36 +47,13 @@
           </div>
 
           <div class="card" style="min-height:0; display:grid; gap:12px;">
-            <div class="card-head slim">
-              <h2>Статті бази знань</h2>
-            </div>
+            <div class="card-head slim"><h2>Статті бази знань</h2></div>
             <div class="search-row">
-              <input type="text" placeholder="Пошук по статтях, фічах, інструкціях" />
-              <button class="btn btn-secondary">Фільтр</button>
-              <button class="btn btn-primary">Нова стаття</button>
+              <input id="searchInput" type="text" placeholder="Пошук по статтях, фічах, інструкціях" />
+              <select id="categoryFilter"><option value="all">Всі</option><option>Онбординг</option><option>Функції</option><option>Інтеграції</option><option>FAQ</option></select>
+              <button class="btn btn-primary" id="newArticleBtn" type="button">Нова стаття</button>
             </div>
-            <div class="kb-list">
-              <div class="kb-item">
-                <strong>Як створити новий проєкт у додатку</strong>
-                <p>Покрокова інструкція для нового користувача: старт, налаштування, перший сценарій використання.</p>
-                <div class="kb-meta"><span class="kb-badge">Онбординг</span><span class="kb-badge">Інструкція</span><span class="kb-badge">Оновлено сьогодні</span></div>
-              </div>
-              <div class="kb-item">
-                <strong>Логіка ролей і доступів</strong>
-                <p>Що бачить адміністратор, менеджер і редактор. Які обмеження і що можна делегувати.</p>
-                <div class="kb-meta"><span class="kb-badge">Права доступу</span><span class="kb-badge">FAQ</span></div>
-              </div>
-              <div class="kb-item">
-                <strong>Типові причини, чому користувач не завершує сценарій</strong>
-                <p>Добірка з болів, поведінки та пояснень з інтерв’ю й підтримки.</p>
-                <div class="kb-meta"><span class="kb-badge">Поведінка користувача</span><span class="kb-badge">Аналітика</span></div>
-              </div>
-              <div class="kb-item">
-                <strong>Інтеграція з Telegram</strong>
-                <p>Які обмеження є, як підключається канал, які дії система виконує після авторизації.</p>
-                <div class="kb-meta"><span class="kb-badge">Інтеграції</span><span class="kb-badge">Telegram</span></div>
-              </div>
-            </div>
+            <div class="kb-list" id="knowledgeList"></div>
           </div>
         </div>
 
@@ -91,38 +61,186 @@
           <div class="split">
             <div class="card">
               <div class="card-head slim"><h2>Нова стаття</h2></div>
-              <div class="stack">
-                <div class="field"><label>Назва</label><input type="text" placeholder="Назва статті" /></div>
-                <div class="field"><label>Категорія</label><select><option>Онбординг</option><option>Функції</option><option>Інтеграції</option><option>FAQ</option></select></div>
-                <div class="field"><label>Теги</label><input type="text" placeholder="telegram, старт, ролі" /></div>
-                <div class="field"><label>Короткий опис</label><textarea></textarea></div>
-                <button class="btn btn-primary">Зберегти статтю</button>
-              </div>
+              <form class="stack" id="articleForm">
+                <div class="field"><label>Назва</label><input id="articleTitle" type="text" placeholder="Назва статті" /></div>
+                <div class="field"><label>Категорія</label><select id="articleCategory"><option>Онбординг</option><option>Функції</option><option>Інтеграції</option><option>FAQ</option></select></div>
+                <div class="field"><label>Теги</label><input id="articleTags" type="text" placeholder="telegram, старт, ролі" /></div>
+                <div class="field"><label>Короткий опис</label><textarea id="articleSummary"></textarea></div>
+                <div class="field"><label>Повний текст</label><textarea id="articleBody" class="long"></textarea></div>
+                <button class="btn btn-primary" type="submit">Зберегти статтю</button>
+              </form>
             </div>
             <div class="card">
               <div class="card-head slim"><h2>З наради в знання</h2></div>
               <div class="stack">
-                <div class="field"><label>Нарада</label><select><option>Нарада по онбордингу</option><option>Зідзвон по Telegram</option></select></div>
-                <div class="field"><label>Витягнутий інсайт</label><textarea class="long">Користувачі не розуміють, чим відрізняється тестовий режим від активного. Потрібно окреме пояснення в базі знань.</textarea></div>
+                <div class="field"><label>Нарада</label><select id="meetingSelect"></select></div>
+                <div class="field"><label>Витягнутий інсайт</label><textarea id="meetingInsight" class="long"></textarea></div>
                 <div class="top-actions">
-                  <button class="btn btn-secondary">Оновити існуючу</button>
-                  <button class="btn btn-primary">Створити нову</button>
+                  <button class="btn btn-secondary" id="updateExistingBtn" type="button">Оновити існуючу</button>
+                  <button class="btn btn-primary" id="createFromMeetingBtn" type="button">Створити нову</button>
                 </div>
+                <div class="tabs-note">MVP-логіка: з наради дістаємо інсайт, а потім переводимо його в повноцінне знання.</div>
               </div>
             </div>
           </div>
 
           <div class="card" style="min-height:0; display:grid; gap:10px;">
             <div class="card-head slim"><h2>Чернетки з нарад</h2></div>
-            <div class="timeline">
-              <div class="setting-row"><span><strong>Новий інсайт по онбордингу</strong><br><small>З наради витягнуто: люди губляться на 2-му кроці підключення</small></span><div class="row-actions"><button class="mini-btn">В статтю</button></div></div>
-              <div class="setting-row"><span><strong>FAQ по Telegram інтеграції</strong><br><small>Потрібна окрема стаття про права адміністратора та підключення каналу</small></span><div class="row-actions"><button class="mini-btn">Створити</button></div></div>
-              <div class="setting-row"><span><strong>Оновити сценарій “перший запуск”</strong><br><small>На нараді узгодили нову логіку після реєстрації</small></span><div class="row-actions"><button class="mini-btn">Оновити</button></div></div>
-            </div>
+            <div class="timeline" id="insightsList"></div>
+          </div>
+
+          <div class="card detail-box" id="detailBox">
+            <h3>Деталі статті</h3>
+            <div class="muted">Вибери статтю зліва, щоб подивитися деталі, теги та повний опис.</div>
           </div>
         </div>
       </section>
     </main>
   </div>
+
+  <script>
+    const state = {
+      knowledge: [
+        {id:1,title:'Як створити новий проєкт у додатку',category:'Онбординг',tags:['старт','проєкт'],summary:'Покрокова інструкція для нового користувача: старт, налаштування, перший сценарій використання.',body:'1. Створи акаунт. 2. Натисни “Новий проєкт”. 3. Вкажи базові параметри. 4. Обери сценарій використання.'},
+        {id:2,title:'Логіка ролей і доступів',category:'FAQ',tags:['ролі','доступи'],summary:'Що бачить адміністратор, менеджер і редактор. Які обмеження і що можна делегувати.',body:'Адміністратор бачить усе. Менеджер працює в межах проєкту. Редактор редагує контент без критичних налаштувань.'},
+        {id:3,title:'Інтеграція з Telegram',category:'Інтеграції',tags:['telegram','канал'],summary:'Як підключається канал і які права потрібні.',body:'Для інтеграції потрібен бот або доступ адміністратора до каналу. Далі система отримує події і може публікувати контент.'}
+      ],
+      meetings: [
+        {id:1,title:'Нарада по онбордингу',date:'2026-03-24',notes:'Користувачі губляться на 2-му кроці підключення. Треба простіше пояснення і окрема стаття.'},
+        {id:2,title:'Зідзвон по Telegram',date:'2026-03-23',notes:'Треба пояснити, які права потрібні адміну каналу, як працює інтеграція і які обмеження є.'}
+      ],
+      selectedId: 1
+    };
+
+    const knowledgeList = document.getElementById('knowledgeList');
+    const detailBox = document.getElementById('detailBox');
+    const meetingSelect = document.getElementById('meetingSelect');
+    const meetingInsight = document.getElementById('meetingInsight');
+    const insightsList = document.getElementById('insightsList');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const searchInput = document.getElementById('searchInput');
+
+    function meetingToInsight(meeting){
+      if (meeting.notes.toLowerCase().includes('telegram')) return 'Потрібна окрема стаття про Telegram інтеграцію: права, підключення, обмеження.';
+      if (meeting.notes.toLowerCase().includes('крок')) return 'Потрібно описати проблемний етап онбордингу окремою інструкцією.';
+      return 'Із цієї наради можна сформувати нову статтю або оновлення бази знань.';
+    }
+
+    function renderMeetings(){
+      meetingSelect.innerHTML = state.meetings.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
+      const first = state.meetings[0];
+      meetingInsight.value = meetingToInsight(first);
+      insightsList.innerHTML = state.meetings.map(m => `
+        <div class="setting-row">
+          <span><strong>${m.title}</strong><br><small>${meetingToInsight(m)}</small></span>
+          <div class="row-actions"><button class="mini-btn" data-load-meeting="${m.id}">В статтю</button></div>
+        </div>`).join('');
+      document.querySelectorAll('[data-load-meeting]').forEach(btn => btn.addEventListener('click', () => {
+        const meeting = state.meetings.find(m => m.id === Number(btn.dataset.loadMeeting));
+        meetingSelect.value = meeting.id;
+        meetingInsight.value = meetingToInsight(meeting);
+      }));
+    }
+
+    function renderKnowledge(){
+      const q = searchInput.value.trim().toLowerCase();
+      const cat = categoryFilter.value;
+      const filtered = state.knowledge.filter(item => {
+        const matchesCat = cat === 'all' || item.category === cat;
+        const matchesQ = !q || `${item.title} ${item.summary} ${item.body} ${item.tags.join(' ')}`.toLowerCase().includes(q);
+        return matchesCat && matchesQ;
+      });
+      knowledgeList.innerHTML = filtered.map(item => `
+        <div class="kb-item ${item.id === state.selectedId ? 'active' : ''}" data-id="${item.id}">
+          <strong>${item.title}</strong>
+          <p>${item.summary}</p>
+          <div class="kb-meta">
+            <span class="kb-badge">${item.category}</span>
+            ${item.tags.map(tag => `<span class="kb-badge">${tag}</span>`).join('')}
+          </div>
+        </div>`).join('');
+      document.querySelectorAll('.kb-item').forEach(el => el.addEventListener('click', () => {
+        state.selectedId = Number(el.dataset.id);
+        renderKnowledge();
+        renderDetails();
+      }));
+    }
+
+    function renderDetails(){
+      const item = state.knowledge.find(x => x.id === state.selectedId);
+      if(!item){
+        detailBox.innerHTML = '<h3>Деталі статті</h3><div class="muted">Нічого не вибрано.</div>';
+        return;
+      }
+      detailBox.innerHTML = `
+        <h3>${item.title}</h3>
+        <div class="kb-meta" style="margin: 8px 0 12px;">
+          <span class="kb-badge">${item.category}</span>
+          ${item.tags.map(tag => `<span class="kb-badge">${tag}</span>`).join('')}
+        </div>
+        <div class="muted"><strong>Коротко:</strong> ${item.summary}</div>
+        <div class="muted" style="margin-top:10px;"><strong>Текст:</strong><br>${item.body}</div>`;
+    }
+
+    document.getElementById('articleForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('articleTitle').value.trim();
+      const category = document.getElementById('articleCategory').value;
+      const tags = document.getElementById('articleTags').value.split(',').map(x => x.trim()).filter(Boolean);
+      const summary = document.getElementById('articleSummary').value.trim();
+      const body = document.getElementById('articleBody').value.trim();
+      if(!title || !summary) return;
+      const id = Date.now();
+      state.knowledge.unshift({id,title,category,tags,summary,body});
+      state.selectedId = id;
+      e.target.reset();
+      renderKnowledge();
+      renderDetails();
+    });
+
+    document.getElementById('createFromMeetingBtn').addEventListener('click', () => {
+      const meeting = state.meetings.find(m => m.id === Number(meetingSelect.value));
+      const insight = meetingInsight.value.trim();
+      if(!meeting || !insight) return;
+      const id = Date.now();
+      state.knowledge.unshift({
+        id,
+        title: meeting.title,
+        category: 'FAQ',
+        tags: ['нарада','інсайт'],
+        summary: insight,
+        body: `${insight}\n\nДжерело: ${meeting.title} від ${meeting.date}.\nНотатки: ${meeting.notes}`
+      });
+      state.selectedId = id;
+      renderKnowledge();
+      renderDetails();
+    });
+
+    document.getElementById('updateExistingBtn').addEventListener('click', () => {
+      const item = state.knowledge.find(x => x.id === state.selectedId);
+      if(!item) return;
+      const insight = meetingInsight.value.trim();
+      item.body += `\n\nОновлення з наради: ${insight}`;
+      if(!item.summary.includes(insight.slice(0,20))) item.summary = insight;
+      renderKnowledge();
+      renderDetails();
+    });
+
+    meetingSelect.addEventListener('change', () => {
+      const meeting = state.meetings.find(m => m.id === Number(meetingSelect.value));
+      meetingInsight.value = meetingToInsight(meeting);
+    });
+
+    document.getElementById('newArticleBtn').addEventListener('click', () => {
+      document.getElementById('articleTitle').focus();
+    });
+
+    searchInput.addEventListener('input', renderKnowledge);
+    categoryFilter.addEventListener('change', renderKnowledge);
+
+    renderMeetings();
+    renderKnowledge();
+    renderDetails();
+  </script>
 </body>
 </html>
