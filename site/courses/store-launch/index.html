@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Запусти свій інтернет-магазин з нуля</title>
+  <style>
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f6f1e8;color:#161616}
+    :root{--bg:#f6f1e8;--card:#fff;--text:#161616;--muted:#655d52;--accent:#111;--gold:#d7a45b;--line:#e8ded0;--soft:#fbf7f1;--shadow:0 18px 50px rgba(34,24,13,.08)}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px}
+    .header{position:sticky;top:0;z-index:20;background:rgba(246,241,232,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,.05)}
+    .header-inner{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:900;letter-spacing:-.03em}.nav{display:flex;gap:18px;flex-wrap:wrap}.nav a{color:#2b2722;text-decoration:none;font-weight:700;font-size:14px}
+    .hero{padding:34px 0 18px;display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:stretch}.hero-main,.hero-side,.card,.program-card,.faq-item,.bonus-card,.result-card,.audience-card,.case-card,.offer-card{background:var(--card);border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow)}
+    .hero-main{padding:34px;background:linear-gradient(180deg,#fff,#faf5ee)}.eyebrow{display:inline-block;padding:8px 14px;border-radius:999px;background:#111;color:#fff;font-size:12px;font-weight:800;margin-bottom:16px}.hero h1{margin:0 0 14px;font-size:clamp(38px,6vw,78px);line-height:.94;letter-spacing:-.05em;text-transform:uppercase;max-width:780px}.hero p{margin:0;color:var(--muted);font-size:18px;line-height:1.55;max-width:640px}.hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 24px}.hero-badge{padding:10px 14px;border-radius:999px;background:#f4ece1;border:1px solid #e5d7c3;font-weight:700;font-size:13px}.actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;padding:16px 24px;border-radius:18px;text-decoration:none;font-weight:800}.btn-primary{background:#111;color:#fff}.btn-secondary{border:1px solid #111;color:#111}.hero-side{padding:20px;display:grid;gap:16px}.photo{overflow:hidden;border-radius:24px;min-height:360px;background:#ddd}.photo img{width:100%;height:100%;object-fit:cover}.mini-card{padding:18px;border-radius:22px;background:#f8f3ec;border:1px solid var(--line)}.mini-card strong{display:block;font-size:28px;margin-bottom:6px}.mini-card p{margin:0;color:var(--muted);line-height:1.45}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:8px 0 28px}.stat{padding:18px;border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}.stat strong{display:block;font-size:34px;margin-bottom:8px}.section{padding:22px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}.section-head h2{margin:0;font-size:clamp(28px,4vw,56px);line-height:.96;letter-spacing:-.04em;text-transform:uppercase}.section-head p{margin:0;color:var(--muted);max-width:520px;line-height:1.5}.grid-4,.grid-3,.program-grid,.results-grid,.bonus-grid,.cases-grid{display:grid;gap:14px}.grid-4{grid-template-columns:repeat(4,1fr)}.grid-3,.results-grid,.bonus-grid,.cases-grid{grid-template-columns:repeat(3,1fr)}.audience-card,.result-card,.bonus-card,.case-card{padding:22px}.audience-card .num,.program-card .num,.bonus-card .num{display:inline-flex;width:34px;height:34px;border-radius:50%;align-items:center;justify-content:center;background:#111;color:#fff;font-size:13px;font-weight:800;margin-bottom:12px}.audience-card h3,.program-card h3,.result-card h3,.bonus-card h3,.case-card h3,.offer-card h3{margin:0 0 10px;font-size:24px;line-height:1.1}.audience-card p,.program-card p,.result-card p,.bonus-card p,.case-card p,.offer-card p,.faq-item p{margin:0;color:var(--muted);line-height:1.55}.expert{display:grid;grid-template-columns:.88fr 1.12fr;gap:16px}.expert-card{padding:24px}.expert-points{display:grid;gap:10px;margin-top:14px}.expert-point{padding:14px 16px;border-radius:18px;background:#f8f3ec;border:1px solid var(--line);font-weight:600}.cases-grid .case-card{background:linear-gradient(180deg,#fff,#fbf7f1)}.case-tag{display:inline-block;padding:8px 12px;border-radius:999px;background:#f1e6d6;font-size:12px;font-weight:800;margin-bottom:12px}.program-grid{grid-template-columns:repeat(2,1fr)}.program-card{padding:22px}.offer-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.offer-card{padding:28px;background:linear-gradient(180deg,#fff,#faf4ea)}.price{display:flex;align-items:end;gap:10px;margin:18px 0}.price strong{font-size:58px;line-height:.9}.price span{color:var(--muted);text-decoration:line-through;font-weight:700}.timer{padding:16px 18px;border-radius:20px;background:#111;color:#fff;font-weight:700}.faq{display:grid;gap:12px}.faq-item{padding:20px}.footer{padding:28px 0 50px;color:var(--muted);font-size:14px}.anchor-card{padding:20px}.anchor-list{display:flex;gap:10px;flex-wrap:wrap}.anchor-list a{padding:10px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);text-decoration:none;color:#111;font-weight:700;font-size:14px}@media (max-width:1024px){.hero,.expert,.offer-wrap,.grid-4,.grid-3,.program-grid,.results-grid,.bonus-grid,.cases-grid,.stats{grid-template-columns:1fr}} 
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">Анатолій Маліновський</div>
+      <nav class="nav">
+        <a href="#for">Для кого</a>
+        <a href="#expert">Про мене</a>
+        <a href="#cases">Кейси</a>
+        <a href="#program">Програма</a>
+        <a href="#offer">Офер</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">Практичний курс по e-commerce</div>
+        <h1>Запусти свій інтернет-магазин з нуля за 7–14 днів</h1>
+        <p>Без досвіду, без програмування, навіть якщо зараз не знаєш, що продавати. Курс побудований так, щоб ти не просто “подивився уроки”, а дійшов до запуску магазину і перших продажів.</p>
+        <div class="hero-badges">
+          <div class="hero-badge">1000+ учнів</div>
+          <div class="hero-badge">80% доходять до запуску</div>
+          <div class="hero-badge">Перші продажі за 7–10 днів</div>
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href="#offer">Запустити свій магазин</a>
+          <a class="btn btn-secondary" href="#program">Дивитись програму</a>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="photo"><img src="../../assets/anatolii.jpg" alt="Анатолій Маліновський"></div>
+        <div class="mini-card"><strong>Не просто курс</strong><p>Це короткий, практичний маршрут: від вибору ніші і товару до запуску реклами, перших замовлень і розуміння, як масштабуватись далі.</p></div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><strong>7+</strong><p>років у маркетингу та залученні клієнтів</p></div>
+      <div class="stat"><strong>350+</strong><p>проєктів і запусків у різних нішах</p></div>
+      <div class="stat"><strong>24+</strong><p>ніш, у яких є практичний досвід просування</p></div>
+    </section>
+
+    <section class="section">
+      <div class="anchor-card card">
+        <div class="anchor-list">
+          <a href="#for">Для кого курс</a>
+          <a href="#expert">Чому мені можна довіряти</a>
+          <a href="#cases">Кейси</a>
+          <a href="#start">З чого можна стартувати</a>
+          <a href="#program">Програма</a>
+          <a href="#bonus">Бонуси</a>
+          <a href="#offer">Ціна</a>
+          <a href="#faq">FAQ</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="for">
+      <div class="section-head">
+        <h2>Цей курс для тебе, якщо</h2>
+        <p>Тут ми продаємо не “уроки”, а ясний шлях до запуску магазину і перших продажів.</p>
+      </div>
+      <div class="grid-4">
+        <div class="audience-card"><div class="num">01</div><h3>Боишся почати</h3><p>Не хочеш злити гроші на рекламу, зробити сайт абияк і потім розчаруватись.</p></div>
+        <div class="audience-card"><div class="num">02</div><h3>Не знаєш, що продавати</h3><p>Немає ідеї товару, ніші або не розумієш, з чого почати в e-commerce.</p></div>
+        <div class="audience-card"><div class="num">03</div><h3>Хочеш додатковий дохід</h3><p>Шукаєш спосіб заробляти онлайн і побудувати щось своє, а не залежати від роботодавця.</p></div>
+        <div class="audience-card"><div class="num">04</div><h3>Хочеш власний бізнес</h3><p>Потрібна проста система запуску без технічної каші і зайвої теорії.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="expert">
+      <div class="section-head">
+        <h2>Я запустив десятки магазинів і знаю, що працює зараз</h2>
+        <p>Твоя сильна сторона тут не в “гарній теорії”, а в реальному досвіді запуску магазинів, реклами та доведення до продажів.</p>
+      </div>
+      <div class="expert">
+        <div class="hero-side expert-card">
+          <div class="photo"><img src="../../assets/anatolii.jpg" alt="Анатолій Маліновський"></div>
+        </div>
+        <div class="card expert-card">
+          <h3>Чому цей курс має вагу</h3>
+          <p>Я не вчу абстрактно “робити сайт”. Я показую, як зібрати робочий інтернет-магазин, підключити оплату і доставку, запустити трафік і довести все до перших замовлень.</p>
+          <div class="expert-points">
+            <div class="expert-point">Практичний досвід у маркетингу, агенції та e-commerce</div>
+            <div class="expert-point">Розуміння реклами, яке дає тобі перевагу перед більшістю “викладачів по магазинам”</div>
+            <div class="expert-point">Фокус не на технічній красі, а на тому, щоб магазин почав продавати</div>
+            <div class="expert-point">Можна підсилити цей блок реальними кейсами, оборотами і скрінами результатів</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cases">
+      <div class="section-head">
+        <h2>Кейси до / після</h2>
+        <p>Цей блок дуже важливий для конверсії. Я одразу заклав під нього окремі картки, щоб потім вставити реальні цифри і скріни.</p>
+      </div>
+      <div class="cases-grid">
+        <div class="case-card"><div class="case-tag">Кейс 01</div><h3>Було: без бізнесу</h3><p>Людина не мала магазину, не розуміла ніші і не знала, як стартувати онлайн.</p><br><p><strong>Стало:</strong> запущений магазин + 20 продажів на тиждень.</p></div>
+        <div class="case-card"><div class="case-tag">Кейс 02</div><h3>Було: продажі тільки в Instagram</h3><p>Хаотичні замовлення в директі, без системи, без сайту і без нормальної аналітики.</p><br><p><strong>Стало:</strong> власний магазин + стабільний прийом замовлень.</p></div>
+        <div class="case-card"><div class="case-tag">Кейс 03</div><h3>Було: страх реклами</h3><p>Було відчуття, що реклама “зіллє бюджет”, бо нема розуміння як її запускати.</p><br><p><strong>Стало:</strong> перші заявки і продажі з реклами за зрозумілою схемою.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="start">
+      <div class="section-head">
+        <h2>Ти зможеш почати навіть якщо зараз у тебе немає</h2>
+        <p>Це блок про простоту входу. Він знімає бар’єри і добре продає новачкам.</p>
+      </div>
+      <div class="results-grid">
+        <div class="result-card"><h3>Немає товару</h3><p>Я дам ідеї ніш і покажу, як вибрати товар, з яким реально можна стартувати.</p></div>
+        <div class="result-card"><h3>Немає сайту</h3><p>Покажу, як швидко зібрати магазин і що в ньому має бути для продажів.</p></div>
+        <div class="result-card"><h3>Немає досвіду</h3><p>Курс зроблений для новачка, який хоче зрозуміти маршрут від А до Я.</p></div>
+        <div class="result-card"><h3>Немає великих вкладень</h3><p>Тут акцент на практичному і простому старті, без важкого входу.</p></div>
+        <div class="result-card"><h3>Немає технічних знань</h3><p>Без програмування і без складних інструкцій, які тільки лякають.</p></div>
+        <div class="result-card"><h3>Немає системи</h3><p>Я дам тобі логіку запуску, а не просто набір розрізнених уроків.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="program">
+      <div class="section-head">
+        <h2>Програма курсу</h2>
+        <p>Цей блок продає логіку результату. Людина має бачити шлях: від ідеї до запуску і масштабування.</p>
+      </div>
+      <div class="program-grid">
+        <div class="program-card"><div class="num">1</div><h3>Як вибрати нішу</h3><p>На що дивитись при виборі напряму, щоб не зайти в мертву нішу.</p></div>
+        <div class="program-card"><div class="num">2</div><h3>Як знайти товар</h3><p>ТОП-способи пошуку товарів і що перевіряти до старту.</p></div>
+        <div class="program-card"><div class="num">3</div><h3>Створення магазину</h3><p>Як зібрати свій сайт на готовому рішенні без складної технічки.</p></div>
+        <div class="program-card"><div class="num">4</div><h3>Оплата і доставка</h3><p>Як підключити базові речі, без яких магазин не буде працювати нормально.</p></div>
+        <div class="program-card"><div class="num">5</div><h3>Запуск реклами</h3><p>Facebook, Instagram, TikTok або інші канали, які підійдуть під твій старт.</p></div>
+        <div class="program-card"><div class="num">6</div><h3>Перші продажі</h3><p>Що робити, щоб перейти від запуску до першої оплати, а не просто “мати сайт”.</p></div>
+        <div class="program-card"><div class="num">7</div><h3>Масштабування</h3><p>Як думати далі: про трафік, окупність і системний ріст магазину.</p></div>
+        <div class="program-card"><div class="num">8</div><h3>Стабільний дохід</h3><p>Як дивитись на інтернет-магазин не як на експеримент, а як на бізнес-модель.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="bonus">
+      <div class="section-head">
+        <h2>Бонуси</h2>
+        <p>Сильний блок для посилення оферу. Його реально варто лишати.</p>
+      </div>
+      <div class="bonus-grid">
+        <div class="bonus-card"><div class="num">+</div><h3>ТОП-20 ніш</h3><p>Список ідей товарів і напрямів, з яких можна почати.</p></div>
+        <div class="bonus-card"><div class="num">+</div><h3>Креативи для реклами</h3><p>Приклади рекламних подач, щоб не стартувати з нуля.</p></div>
+        <div class="bonus-card"><div class="num">+</div><h3>Шаблони сайтів</h3><p>Щоб швидше зібрати магазин і не придумувати все самостійно.</p></div>
+        <div class="bonus-card"><div class="num">+</div><h3>Чекліст запуску</h3><p>Покроковий список, щоб нічого не загубити перед стартом.</p></div>
+        <div class="bonus-card"><div class="num">+</div><h3>Скрипти продажів</h3><p>Базові формулювання для роботи з першими клієнтами і заявками.</p></div>
+        <div class="bonus-card"><div class="num">+</div><h3>Маршрут до запуску</h3><p>Щоб людина бачила не хаос, а чіткий шлях до результату.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="offer">
+      <div class="offer-wrap">
+        <div class="offer-card">
+          <div class="eyebrow">Спецпропозиція</div>
+          <h3>Запуск інтернет-магазину з нуля</h3>
+          <p>Це тестовий офер, який легко підкрутити під твою фінальну модель продажу. Зараз я заклав дешевий вхід, але можна підняти до сильнішого продукту.</p>
+          <div class="price"><strong>19$</strong><span>190$</span></div>
+          <div class="actions"><a class="btn btn-primary" href="#">Забрати курс</a><a class="btn btn-secondary" href="#program">Подивитись програму</a></div>
+        </div>
+        <div class="offer-card">
+          <div class="timer">-90% • обмежена кількість місць • таймер можна підключити окремо</div>
+          <br>
+          <h3>Що отримає клієнт</h3>
+          <p>Готову логіку запуску магазину, розуміння реклами, перші продажі та основу для системного заробітку в e-commerce.</p>
+          <div class="expert-points">
+            <div class="expert-point">Готовий магазин</div>
+            <div class="expert-point">Перші продажі</div>
+            <div class="expert-point">Розуміння реклами</div>
+            <div class="expert-point">Система заробітку</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head">
+        <h2>FAQ</h2>
+        <p>Закриваємо типові страхи, які найчастіше стопорять покупку.</p>
+      </div>
+      <div class="faq">
+        <div class="faq-item"><h3>А якщо в мене не вийде?</h3><p>Курс побудований так, щоб провести тебе по простому маршруту. Головна задача тут не “дати інформацію”, а довести до запуску і перших кроків у продажах.</p></div>
+        <div class="faq-item"><h3>Скільки треба грошей на старт?</h3><p>Залежить від моделі, товару і швидкості, з якою ти хочеш стартувати. Але курс спроєктований під м’який старт без великих вкладень.</p></div>
+        <div class="faq-item"><h3>Чи підійде це новачку?</h3><p>Так. Якраз для новачка цей лендінг і зібраний. Тут фокус на простоті, ясності і практичному результаті.</p></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © 2026 Анатолій Маліновський • Лендинг курсу по запуску інтернет-магазину
+    </footer>
+  </main>
+</body>
+</html>
